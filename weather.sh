@@ -11,6 +11,14 @@ degreeCharacter="c"
 data=0
 lastUpdateTime=0
 FeelsLike=0
+dynamicUpdates=0
+
+if [ -f "$HOME/.config/weather_sh.rc" ];then
+    readarray -t line < "$HOME/.config/weather_sh.rc"
+    apiKey=${line[0]}
+    defaultLocation=${line[1]}
+    degreeCharacter=${line[2]}
+fi
 
 while [ $# -gt 0 ]; do
 option="$1"
@@ -34,6 +42,11 @@ option="$1"
     shift ;;
     esac
 done
+
+if [ -z $apiKey ];then
+    echo "No API Key specified in rc, script, or command line."
+    exit
+fi
 
 dataPath="/tmp/wth-$defaultLocation.json"
 if [ ! -e $dataPath ];
@@ -169,6 +182,11 @@ while true; do
         fi
     fi
     AsOf=$(date +"%Y-%m-%d %R" -d @$lastfileupdate) 
+    if [ "$OpenBox" = "False" ];then
+        if [ "$HTML" = "False" ];then
+            Terminal="True"
+        fi
+    fi
     if [ "$Terminal" = "True" ];then
         echo "Station: $Station, $Country $Lat / $Long"
         echo "As Of: $AsOf "  
@@ -215,5 +233,5 @@ while true; do
     fi
     if [ $dynamicUpdates -eq 0 ];then
         break
-    fi
+    fi    
 done
