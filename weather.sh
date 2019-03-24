@@ -1,11 +1,9 @@
 #!/bin/bash
 
-## TODO:  Add rc for things including API key
 # TODO: Add in sunrise/sunset calcuations
 
-apiKey="NotARealAPIKey"
-defaultLocation="Dayton"
-dynamicUpdates=0
+apiKey=""
+defaultLocation=""
 OpenBox="False"
 Terminal="False"
 HTML="False"
