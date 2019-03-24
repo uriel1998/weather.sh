@@ -34,14 +34,16 @@ This project is licensed under the MIT license. For the full license, see `LICEN
  * `bc` basic calculator for floating point arithmetic. Can be found in the `bc` package on major Linux distributions.
  * `curl` command-line tool for getting data using HTTP protocol. cURL can be found in the `curl` package on major Linux distributions.
  * `grep` command-line tool used for parsing downloaded XML data. `grep` can be found in the `grep` package on major Linux distributions.
+ * `jq` command-line tool for parsing JSON data. `jq` can be found in the `jq` package on major Linux distributions.
 
 ## 4. How to use
 
-### Options
+### `weather_sh.rc`
 
-At the beginning of the script is a place for your default location and 
-API key. These will be moved to an `rc` or `ini` file later. You may 
-also specify them on the commandline.
+Copy (and edit, as appropriate) the `weather_sh.rc` file to `$HOME\.config`.   
+The first line is the OpenWeatherMap API key  
+The second line is your default location  
+The third line is your default degree character (either `c` or `f`).  
 
 ### Command-line options
 
