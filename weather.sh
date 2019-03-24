@@ -12,12 +12,14 @@ data=0
 lastUpdateTime=0
 FeelsLike=0
 dynamicUpdates=0
+UseIcons="True"
 
 if [ -f "$HOME/.config/weather_sh.rc" ];then
     readarray -t line < "$HOME/.config/weather_sh.rc"
     apiKey=${line[0]}
     defaultLocation=${line[1]}
     degreeCharacter=${line[2]}
+    UseIcons=${line[3]}
 fi
 
 while [ $# -gt 0 ]; do
@@ -77,20 +79,23 @@ while true; do
         ####################################################################
         # Current conditions (and icon)
         ####################################################################
-
-        icons=$(echo $data | jq -r .weather[].icon | tr '\n' ' ')
-        iconval=${icons%?}
-        case $iconval in
-            01*) icon="☀️";;
-            02*) icon="🌤";;
-            03*) icon="🌥";;
-            04*) icon="☁";;
-            09*) icon="🌧";;
-            10*) icon="🌦";;
-            11*) icon="🌩";;
-            13*) icon="🌨";;
-            50*) icon="🌫";;
-        esac
+        if [ "$UseIcons" = "True" ];then
+            icons=$(echo $data | jq -r .weather[].icon | tr '\n' ' ')
+            iconval=${icons%?}
+            case $iconval in
+                01*) icon="☀️";;
+                02*) icon="🌤";;
+                03*) icon="🌥";;
+                04*) icon="☁";;
+                09*) icon="🌧";;
+                10*) icon="🌦";;
+                11*) icon="🌩";;
+                13*) icon="🌨";;
+                50*) icon="🌫";;
+            esac
+        else
+            icon=""
+        fi
         ShortWeather=$(echo $data | jq -r .weather[].main | tr '\n' ' ')
         LongWeather=$(echo $data | jq -r .weather[].description | sed -E 's/\S+/\u&/g' | tr '\n' ' ')
 

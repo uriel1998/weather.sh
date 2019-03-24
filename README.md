@@ -35,15 +35,22 @@ This project is licensed under the MIT license. For the full license, see `LICEN
  * `curl` command-line tool for getting data using HTTP protocol. cURL can be found in the `curl` package on major Linux distributions.
  * `grep` command-line tool used for parsing downloaded XML data. `grep` can be found in the `grep` package on major Linux distributions.
  * `jq` command-line tool for parsing JSON data. `jq` can be found in the `jq` package on major Linux distributions.
+ * `tr` command-line tool for parsing JSON data. `tr` can be found in the `tr` package on major Linux distributions.
 
 ## 4. How to use
+
+Run `weather.sh` with the appropriate commandline switches (below). If 
+the current conditions do not qualify for the heat index or wind chill, 
+it is not displayed.
 
 ### `weather_sh.rc`
 
 Copy (and edit, as appropriate) the `weather_sh.rc` file to `$HOME\.config`.   
 The first line is the OpenWeatherMap API key  
 The second line is your default location  
-The third line is your default degree character (either `c` or `f`).  
+The third line is your default degree character (either `c` or `f`)
+The fourth line is True or False depending on whether or not you want 
+icons displayed for the weather.
 
 ### Command-line options
 
