@@ -96,17 +96,17 @@ while true; do
         else
             icon=""
         fi
-        ShortWeather=$(echo $data | jq -r .weather[].main | tr '\n' ' ')
-        LongWeather=$(echo $data | jq -r .weather[].description | sed -E 's/\S+/\u&/g' | tr '\n' ' ')
+        ShortWeather=$(echo $data | jq -r .weather[].main | tr '\n' ' '| awk '{$1=$1};1' )
+        LongWeather=$(echo $data | jq -r .weather[].description | sed -E 's/\S+/\u&/g' | tr '\n' ' '| awk '{$1=$1};1' )
 
         ####################################################################
         # Temperature
         ####################################################################
-        tempinc=$(echo $data | jq -r .main.temp)   
-        RawTemp=$(echo $data | jq -r .main.temp)
+        tempinc=$(echo $data | jq -r .main.temp| awk '{$1=$1};1' )   
+        RawTemp=$(echo $data | jq -r .main.temp| awk '{$1=$1};1' )
         temperature=$tempinc
         if  [ "$degreeCharacter" = "f" ]; then
-            temperature=$(echo "scale=2; 32+1.8*$tempinc" | bc)
+            temperature=$(echo "scale=2; 32+1.8*$tempinc" | bc| awk '{$1=$1};1' )
         fi
         
         ####################################################################
@@ -127,16 +127,16 @@ while true; do
         
         #Conversion
         if  [ "$degreeCharacter" = "f" ]; then
-            WindSpeed=$(echo "scale=2; $WindSpeed*0.6213712" | bc | xargs printf "%.2f")
-            WindGusts=$(echo "scale=2; $WindGusts*0.6213712" | bc | xargs printf "%.2f")
+            WindSpeed=$(echo "scale=2; $WindSpeed*0.6213712" | bc | xargs printf "%.2f"| awk '{$1=$1};1' )
+            WindGusts=$(echo "scale=2; $WindGusts*0.6213712" | bc | xargs printf "%.2f"| awk '{$1=$1};1' )
             windunit="mph"
         else
-            WindGusts=$(echo "scale=2; $WindGusts*1" | bc)
+            WindGusts=$(echo "scale=2; $WindGusts*1" | bc| awk '{$1=$1};1' )
             windunit="kph"
         fi        
 
-        Humidity=$(echo $data | jq .main.humidity)
-        CloudCover=$(echo $data | jq .clouds.all)
+        Humidity=$(echo $data | jq .main.humidity| awk '{$1=$1};1' )
+        CloudCover=$(echo $data | jq .clouds.all| awk '{$1=$1};1' )
 
         ####################################################################
         # Feels Like Calculations
@@ -149,10 +149,10 @@ while true; do
                 FeelsLike=1
                 if [ "degreeCharacter" = "f" ];then
                     WindSpeedExp=$(echo "e(0.16*l($WindSpeed))" | bc -l )
-                    FeelsLikeTemp=$(echo "scale=2; 35.74 + 0.6215*$temperature - 35.75*$WindSpeedExp + 0.4275*$temperature*$WindSpeedExp" | bc | xargs printf "%.2f")
+                    FeelsLikeTemp=$(echo "scale=2; 35.74 + 0.6215*$temperature - 35.75*$WindSpeedExp + 0.4275*$temperature*$WindSpeedExp" | bc | xargs printf "%.2f"| awk '{$1=$1};1' )
                 else
                     WindSpeedExp=$(echo "e(0.16*l($WindSpeed))" | bc -l )
-                    FeelsLikeTemp=$(echo "scale=2; 13.12 + 0.6215*$temperature - 11.37*$WindSpeedExp + 0.3965*$temperature*$WindSpeedExp" | bc | xargs printf "%.2f")
+                    FeelsLikeTemp=$(echo "scale=2; 13.12 + 0.6215*$temperature - 11.37*$WindSpeedExp + 0.3965*$temperature*$WindSpeedExp" | bc | xargs printf "%.2f"| awk '{$1=$1};1' )
                 fi
             fi
         fi
@@ -168,9 +168,9 @@ while true; do
         fi
         if (( $(bc -l<<<"$HITemp> 79") )); then #temp criteria for heat index
             FeelsLike=1
-            FeelsLikeTemp=$(echo "scale=2;0.5 * ($HITemp + 61.0 + (($HITemp-68.0)*1.2) + ($Humidity*0.094))" | bc)
+            FeelsLikeTemp=$(echo "scale=2;0.5 * ($HITemp + 61.0 + (($HITemp-68.0)*1.2) + ($Humidity*0.094))" | bc| awk '{$1=$1};1' )
             if [ "$degreeCharacter" = "c" ];then
-                FeelsLikeTemp=$(echo "scale=2; ($FeelsLikeTemp-32) / 1.8" | bc)
+                FeelsLikeTemp=$(echo "scale=2; ($FeelsLikeTemp-32) / 1.8" | bc| awk '{$1=$1};1' )
 
             fi
         fi
@@ -180,7 +180,7 @@ while true; do
         ####################################################################
         pressure=$(echo $data | jq .main.pressure)
         if  [ "$degreeCharacter" = "f" ]; then
-            pressure=$(echo "scale=2; $pressure/33.863886666667" | bc)
+            pressure=$(echo "scale=2; $pressure/33.863886666667" | bc | awk '{$1=$1};1' )
             pressureunit="in"
         else
             pressureunit="hPa"
@@ -197,11 +197,11 @@ while true; do
         echo "As Of: $AsOf "  
         echo "Current Conditions: $icon $LongWeather"
         #echo "$icon $ShortWeather"
-        echo "Temp: $temperature °${degreeCharacter^^}"
+        echo "Temp: $temperature°${degreeCharacter^^}"
         if [ "$FeelsLike" = "1" ];then
-            echo "Feels Like: $FeelsLikeTemp °${degreeCharacter^^}"
+            echo "Feels Like: $FeelsLikeTemp°${degreeCharacter^^}"
         fi
-        echo "Pressure: $pressure $pressureunit"
+        echo "Pressure: $pressure$pressureunit"
         echo -e \\u$winddir "$WindSpeed$windunit Gusts: $WindGusts$windunit"
         echo "Humidity: $Humidity%"
         echo "Cloud Cover: $CloudCover%"
