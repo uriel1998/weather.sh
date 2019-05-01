@@ -152,16 +152,46 @@ while true; do
 
 
     AsOf=$(date +"%Y-%m-%d %R" -d @$lastfileupdate) 
-        #echo "Station: $Station, $Country $Lat / $Long"
-        echo "As Of: $AsOf "  
+    
+    
+        
+    if [ "$OpenBox" = "False" ];then
+        if [ "$HTML" = "False" ];then
+            Terminal="True"
+        fi
+    fi
+    if [ "$Terminal" = "True" ];then
+        echo "Forecast for $Station as of: $AsOf "  
         let i=0
         while [ $i -lt 40 ]; do 
-            #echo "$i $NumEntries"
+
             ShortDate=$(date +"%m/%d@%R" -d @${NixDate[$i]})
             printf "%-12s %-2s%-20s %-15s %-14s %-14s %-14s\n" "$ShortDate:" "${icon[$i]} " "${LongWeather[$i]}" "Temp:${temperature[$i]}°${degreeCharacter^^}" "Wind:${WindSpeed[$i]}$windunit" "Humidity:${Humidity[$i]}%" "Cloud Cover:${CloudCover[$i]}%"
-            
+           
             i=$((i + 1))
         done
+    fi
+    if [ "$OpenBox" = "True" ]; then
+        echo '<openbox_pipe_menu>' 
+        echo '<separator label="Forecast" />' 
+        printf '<item label="Forecast for %s as of %s" />\n' "$Station" "$AsOf"  
+        let i=0
+        while [ $i -lt 40 ]; do 
+            ShortDate=$(date +"%m/%d@%R" -d @${NixDate[$i]})
+            printf '<item label="%-12s %-2s%-20s %-15s %-14s %-14s %-14s/>\n' "$ShortDate:" "${icon[$i]} " "${LongWeather[$i]}" "Temp:${temperature[$i]}°${degreeCharacter^^}" "Wind:${WindSpeed[$i]}$windunit" "Humidity:${Humidity[$i]}%" "Cloud Cover:${CloudCover[$i]}%"          
+            i=$((i + 1))
+        done
+        echo '</openbox_pipe_menu>' 
+    fi
+    if [ "$HTML" = "True" ];then
+        echo "Forecast for $Station as of: $AsOf  <br  />"  
+        let i=0
+        while [ $i -lt 40 ]; do 
+            ShortDate=$(date +"%m/%d@%R" -d @${NixDate[$i]})
+            printf "%-12s %-2s%-20s %-15s %-14s %-14s %-14s<br  />\n" "$ShortDate:" "${icon[$i]} " "${LongWeather[$i]}" "Temp:${temperature[$i]}°${degreeCharacter^^}" "Wind:${WindSpeed[$i]}$windunit" "Humidity:${Humidity[$i]}%" "Cloud Cover:${CloudCover[$i]}%"
+            i=$((i + 1))
+        done
+    fi
     if [ $dynamicUpdates -eq 0 ];then
         break
     fi    

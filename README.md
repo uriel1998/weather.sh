@@ -36,6 +36,7 @@ This project is licensed under the MIT license. For the full license, see `LICEN
  * `grep` command-line tool used for parsing downloaded XML data. `grep` can be found in the `grep` package on major Linux distributions.
  * `jq` command-line tool for parsing JSON data. `jq` can be found in the `jq` package on major Linux distributions.
  * `tr` command-line tool for parsing JSON data. `tr` can be found in the `tr` package on major Linux distributions.
+ * `awk` command-line tool for parsing JSON data. `awk` can be found in the `awk` package on major Linux distributions. 
 
 ## 4. How to use
 
