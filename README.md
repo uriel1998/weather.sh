@@ -2,7 +2,7 @@
 A bash script to get the weather and forecast from OpenWeatherMap and output 
 to the terminal, Openbox, or HTML
 
-![Output example](example_output.png "Example output")
+![Output example](https://raw.githubusercontent.com/uriel1998/weather.sh/master/example_output.png "Example output")
 
 ## Contents
  1. [About](#1-about)
