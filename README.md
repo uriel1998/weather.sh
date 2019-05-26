@@ -2,6 +2,9 @@
 A bash script to get the weather and forecast from OpenWeatherMap and output 
 to the terminal, Openbox, or HTML
 
+![Output example][output]
+
+[output]: https://i.postimg.cc/T1WsDkJs/2019-05-26-1558885180-667x428-scrot.png "Example output"
 
 ## Contents
  1. [About](#1-about)
@@ -71,7 +74,7 @@ chill, it is not displayed.
 
 Copy (and edit, as appropriate) the `weather_sh.rc` file to `$HOME\.config`.   
 The first line is the OpenWeatherMap API key  
-The second line is your default location  
+The second line is your default location. (See note below)  
 The third line is your default degree character (either `c` or `f`)  
 The fourth line is True or False depending on whether or not you want 
 icons displayed for the weather.
@@ -82,7 +85,7 @@ icons displayed for the weather.
 options:
 
  * `-k` Specifies OpenWeatherMap API key from the command-line.
- * `-l city_name` Sets the city for manual weather lookup.
+ * `-l city_name` Sets the city for manual weather lookup. (see note below)
  * `-t` Output to the terminal/stdout (default if no output is specified)
  * `-h` Output HTML formatted text
  * `-o` Output OpenBox output
@@ -94,8 +97,13 @@ options:
 _Note: If the OpenWeatherMap API key is specified from the command-line, it 
 will override the API key set in the file._
 
+_Note: It is **STRONGLY** recommended to use the City ID from OpenWeatherMap 
+instead of a city name. Instructions on finding your city's City ID 
+[here](https://www.dmopress.com/openweathermap-howto/) ._
+
 ## 5. Todo
 
  * Add in sunrise/sunset
  * HTML colored output
- * Current location instead of hardcoded
+ * Current location instead of hardcoded 
+    - this is problematic due to the way the API looks up city names.

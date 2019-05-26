@@ -13,8 +13,8 @@ lastUpdateTime=0
 FeelsLike=0
 dynamicUpdates=0
 UseIcons="True"
-colors=0
-
+colors="False"
+CityID="True"
 
 if [ -f "$HOME/.config/weather_sh.rc" ];then
     readarray -t line < "$HOME/.config/weather_sh.rc"
@@ -22,7 +22,17 @@ if [ -f "$HOME/.config/weather_sh.rc" ];then
     defaultLocation=${line[1]}
     degreeCharacter=${line[2]}
     UseIcons=${line[3]}
-    colors=${line[4]}
+    temp=${line[4]}
+    if [ "$temp" = "True" ];then
+        if [ -f "$HOME/.bashcolors" ];then
+            source "$HOME/.bashcolors"
+            colors="True"
+        else
+            colors=""
+        fi
+    else
+        colors=""
+    fi
 fi
 
 while [ $# -gt 0 ]; do
@@ -59,11 +69,23 @@ if [ -z $apiKey ];then
     exit
 fi
 
+#Is it City ID or a string?
+case $defaultLocation in
+    ''|*[!0-9]*) CityID="False" ;;
+    *) CityID="True" ;;
+esac
+
 dataPath="/tmp/wth-$defaultLocation.json"
+
 if [ ! -e $dataPath ];
 then
     touch $dataPath
-    data=$(curl "http://api.openweathermap.org/data/2.5/weather?q=$defaultLocation&units=metric&appid=$apiKey")
+    #The API call is different if city ID is used instead of string lookup
+    if [ "$CityID" = "True" ];then
+        data=$(curl "http://api.openweathermap.org/data/2.5/weather?id=$defaultLocation&units=metric&appid=$apiKey")
+    else
+        data=$(curl "http://api.openweathermap.org/data/2.5/weather?q=$defaultLocation&units=metric&appid=$apiKey")
+    fi
     echo $data > $dataPath
 else
     data=$(cat $dataPath)
@@ -73,7 +95,11 @@ lastUpdateTime=$(($(date +%s) -600))
 while true; do
     lastfileupdate=$(date -r $dataPath +%s)
     if [ $(($(date +%s)-$lastfileupdate)) -ge 600 ];then
-        data=$(curl -s "http://api.openweathermap.org/data/2.5/weather?q=$defaultLocation&units=metric&appid=$apiKey")
+        if [ "$CityID" = "True" ];then
+            data=$(curl "http://api.openweathermap.org/data/2.5/weather?id=$defaultLocation&units=metric&appid=$apiKey")
+        else
+            data=$(curl "http://api.openweathermap.org/data/2.5/weather?q=$defaultLocation&units=metric&appid=$apiKey")
+        fi
         echo $data > $dataPath
     fi
     if [ $(($(date +%s)-$lastUpdateTime)) -ge 600 ]; then
