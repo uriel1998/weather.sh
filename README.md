@@ -1,5 +1,6 @@
-# weather.sh
-A bash script to get the weather from OpenWeatherMap and output to the terminal, Openbox, or HTML
+# weather.sh and forecast.sh
+A bash script to get the weather and forecast from OpenWeatherMap and output 
+to the terminal, Openbox, or HTML
 
 
 ## Contents
@@ -23,6 +24,18 @@ wind chill or heat index. A great deal of basis for this script comes
 from [BashWeather](https://github.com/jdotjdot/BashWeather),
 [bash-weather](https://github.com/szantaii/bash-weather),
 and many more that I forgot to save the URLs of.
+
+`forecast.sh` gets the forecast from [OpenWeatherMap](http://openweathermap.org/) 
+and likewise displays the results. OpenWeatherMap forecasts are at three hour 
+intervals (0800, 1100, 1400, etc). It displays all forecasts for the next 
+twenty four hours, then displays the closest time forecast for the day after 
+that. For example, if it's 1136 (as I'm writing this) it shows all forecasts 
+through the 1100 forecast the next day, then the 1100 forecast for each 
+subsequent day. Options and `.rc` file are *the same* as for `weather.sh`.
+
+If you wish to show both together, simply execute:
+
+`weather.sh && forecast.sh` 
 
 ## 2. License
 
@@ -50,9 +63,9 @@ Optional: For colors in terminal, save `bashcolors` in this repository to
 
 ## 4. How to use
 
-Run `weather.sh` with the appropriate commandline switches (below). If 
-the current conditions do not qualify for the heat index or wind chill, 
-it is not displayed.
+Run `weather.sh` or `forecast.sh` with the appropriate commandline switches 
+(below). If  the current conditions do not qualify for the heat index or wind 
+chill, it is not displayed.
 
 ### weather_sh.rc
 
@@ -65,7 +78,8 @@ icons displayed for the weather.
 
 ### Command-line options
 
-`weather.sh` can be started with the following command line options:
+`weather.sh` and `forecast.sh` can be started with the following command line 
+options:
 
  * `-k` Specifies OpenWeatherMap API key from the command-line.
  * `-l city_name` Sets the city for manual weather lookup.
@@ -84,4 +98,4 @@ will override the API key set in the file._
 
  * Add in sunrise/sunset
  * HTML colored output
- 
+ * Current location instead of hardcoded

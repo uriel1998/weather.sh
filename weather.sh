@@ -22,6 +22,7 @@ if [ -f "$HOME/.config/weather_sh.rc" ];then
     defaultLocation=${line[1]}
     degreeCharacter=${line[2]}
     UseIcons=${line[3]}
+    colors=${line[4]}
 fi
 
 while [ $# -gt 0 ]; do
