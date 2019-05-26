@@ -7,6 +7,7 @@ A bash script to get the weather from OpenWeatherMap and output to the terminal,
  2. [License](#2-license)
  3. [Prerequisites](#3-prerequisites)
  4. [How to use](#4-how-to-use)
+ 5. [TODO](#5-todo)
 
 ***
 
@@ -31,12 +32,21 @@ This project is licensed under the MIT license. For the full license, see `LICEN
 
  * OpenWeatherMap API key ([http://openweathermap.org/appid](http://openweathermap.org/appid)).
  * Bash shell ≥ 4.2.
- * `bc` basic calculator for floating point arithmetic. Can be found in the `bc` package on major Linux distributions.
- * `curl` command-line tool for getting data using HTTP protocol. cURL can be found in the `curl` package on major Linux distributions.
- * `grep` command-line tool used for parsing downloaded XML data. `grep` can be found in the `grep` package on major Linux distributions.
- * `jq` command-line tool for parsing JSON data. `jq` can be found in the `jq` package on major Linux distributions.
- * `tr` command-line tool for parsing JSON data. `tr` can be found in the `tr` package on major Linux distributions.
- * `awk` command-line tool for parsing JSON data. `awk` can be found in the `awk` package on major Linux distributions. 
+ * `bc` basic calculator for floating point arithmetic. Can be found in the 
+ `bc` package on major Linux distributions.
+ * `curl` command-line tool for getting data using HTTP protocol. cURL can be 
+ found in the `curl` package on major Linux distributions.
+ * `grep` command-line tool used for parsing downloaded XML data. `grep` can 
+ be found in the `grep` package on major Linux distributions.
+ * `jq` command-line tool for parsing JSON data. `jq` can be found in the `jq` 
+ package on major Linux distributions.
+ * `tr` command-line tool for parsing JSON data. `tr` can be found in the `tr` 
+ package on major Linux distributions.
+ * `awk` command-line tool for parsing JSON data. `awk` can be found in the 
+ `awk` package on major Linux distributions. 
+
+Optional: For colors in terminal, save `bashcolors` in this repository to 
+`.bashcolors` in your `$HOME` directory.
 
 ## 4. How to use
 
@@ -63,5 +73,15 @@ icons displayed for the weather.
  * `-h` Output HTML formatted text
  * `-o` Output OpenBox output
  * `-f` Use imperial (farenheit, inches Hg, mph) units; default is metric
+ * `-c` Use colored output in the terminal if `.bashcolors` is in the home 
+ dir. Note that if you want to alter the colors, you will have to manually
+ alter the script.
+ 
+_Note: If the OpenWeatherMap API key is specified from the command-line, it 
+will override the API key set in the file._
 
-_Note: If the OpenWeatherMap API key is specified from the command-line, it will override the API key set in the file._
+## 5. Todo
+
+ * Add in sunrise/sunset
+ * HTML colored output
+ 

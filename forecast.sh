@@ -69,7 +69,7 @@ fi
 dataPath="/tmp/fore-$defaultLocation.json"
 if [ ! -e $dataPath ];then
     touch $dataPath
-    data=$(curl "http://api.openweathermap.org/data/2.5/forecast?q=$defaultLocation&units=metric&appid=$apiKey")
+    data=$(curl -s "http://api.openweathermap.org/data/2.5/forecast?q=$defaultLocation&units=metric&appid=$apiKey")
     echo $data > $dataPath
 else
     data=$(cat $dataPath)

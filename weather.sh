@@ -13,6 +13,8 @@ lastUpdateTime=0
 FeelsLike=0
 dynamicUpdates=0
 UseIcons="True"
+colors=0
+
 
 if [ -f "$HOME/.config/weather_sh.rc" ];then
     readarray -t line < "$HOME/.config/weather_sh.rc"
@@ -41,6 +43,12 @@ option="$1"
     -o) OpenBox="True"
     shift ;;    
     -f) degreeCharacter="f"
+    shift ;;
+    -c) 
+        if [ -f "$HOME/.bashcolors" ];then
+            source "$HOME/.bashcolors"
+            colors="True"
+        fi
     shift ;;
     esac
 done
@@ -193,18 +201,33 @@ while true; do
         fi
     fi
     if [ "$Terminal" = "True" ];then
-        echo "Station: $Station, $Country $Lat / $Long"
-        echo "As Of: $AsOf "  
-        echo "Current Conditions: $icon $LongWeather"
-        #echo "$icon $ShortWeather"
-        echo "Temp: $temperature°${degreeCharacter^^}"
-        if [ "$FeelsLike" = "1" ];then
-            echo "Feels Like: $FeelsLikeTemp°${degreeCharacter^^}"
+        if [ "$colors" = "True" ]; then
+            echo "Station: $Station, $Country $Lat / $Long"
+            echo "As Of: ${YELLOW}$AsOf ${RESTORE}"  
+            echo "Right Now: ${CYAN}$icon $LongWeather${RESTORE}"
+            #echo "$icon $ShortWeather"
+            echo "Temp: ${CYAN}$temperature°${degreeCharacter^^}${RESTORE}"
+            if [ "$FeelsLike" = "1" ];then
+                echo "Feels Like: ${RED}$FeelsLikeTemp°${degreeCharacter^^}${RESTORE}"
+            fi
+            echo "Pressure: ${GREEN}$pressure$pressureunit${MAGENTA}"
+            echo -e \\u$winddir "$WindSpeed$windunit${RESTORE} Gusts: ${MAGENTA}$WindGusts$windunit${RESTORE}"
+            echo "Humidity: ${GREEN}$Humidity%${RESTORE}"
+            echo "Cloud Cover: ${GREEN}$CloudCover%${RESTORE}"        
+        else
+            echo "Station: $Station, $Country $Lat / $Long"
+            echo "As Of: $AsOf "  
+            echo "Right Now: $icon $LongWeather"
+            #echo "$icon $ShortWeather"
+            echo "Temp: $temperature°${degreeCharacter^^}"
+            if [ "$FeelsLike" = "1" ];then
+                echo "Feels Like: $FeelsLikeTemp°${degreeCharacter^^}"
+            fi
+            echo "Pressure: $pressure$pressureunit"
+            echo -e \\u$winddir "$WindSpeed$windunit Gusts: $WindGusts$windunit"
+            echo "Humidity: $Humidity%"
+            echo "Cloud Cover: $CloudCover%"
         fi
-        echo "Pressure: $pressure$pressureunit"
-        echo -e \\u$winddir "$WindSpeed$windunit Gusts: $WindGusts$windunit"
-        echo "Humidity: $Humidity%"
-        echo "Cloud Cover: $CloudCover%"
     fi
     if [ "$OpenBox" = "True" ]; then
         echo '<openbox_pipe_menu>' 
