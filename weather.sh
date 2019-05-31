@@ -104,8 +104,6 @@ while true; do
     fi
     if [ $(($(date +%s)-$lastUpdateTime)) -ge 600 ]; then
         lastUpdateTime=$(date +%s)
-        clear
-        
         Station=$(echo $data | jq -r .name)
         Lat=$(echo $data | jq -r .coord.lat)
         Long=$(echo $data | jq -r .coord.lon)
