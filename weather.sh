@@ -4,6 +4,7 @@
 
 apiKey=""
 defaultLocation=""
+Conky="False"
 OpenBox="False"
 Terminal="False"
 HTML="False"
@@ -52,6 +53,8 @@ option="$1"
     -h) HTML="True"
     shift ;;
     -o) OpenBox="True"
+    shift ;;    
+    -y) Conky="True"
     shift ;;    
     -f) degreeCharacter="f"
     shift ;;
@@ -222,7 +225,9 @@ while true; do
     AsOf=$(date +"%Y-%m-%d %R" -d @$lastfileupdate) 
     if [ "$OpenBox" = "False" ];then
         if [ "$HTML" = "False" ];then
-            Terminal="True"
+            if [ "$Conky" = "False" ];then
+                Terminal="True"
+            fi
         fi
     fi
     if [ "$Terminal" = "True" ];then
@@ -253,6 +258,13 @@ while true; do
             echo "Humidity: $Humidity%"
             echo "Cloud Cover: $CloudCover%"
         fi
+    fi
+    if [ "$Conky" = "True" ]; then
+        bob=$(echo "$ShortWeather $temperature°${degreeCharacter^^}")
+        if [ "$FeelsLike" = "1" ];then
+            bob=$(echo "$bob/$FeelsLikeTemp°${degreeCharacter^^}")
+        fi
+        echo "$bob"
     fi
     if [ "$OpenBox" = "True" ]; then
         echo '<openbox_pipe_menu>' 

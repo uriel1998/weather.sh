@@ -87,6 +87,7 @@ options:
  * `-t` Output to the terminal/stdout (default if no output is specified)
  * `-h` Output HTML formatted text
  * `-o` Output OpenBox output
+ * `-y` Output Conky format (no icons)
  * `-f` Use imperial (farenheit, inches Hg, mph) units; default is metric
  * `-c` Use colored output in the terminal if `.bashcolors` is in the home 
  dir. Note that if you want to alter the colors, you will have to manually
@@ -98,6 +99,16 @@ will override the API key set in the file._
 _Note: It is **STRONGLY** recommended to use the City ID from OpenWeatherMap 
 instead of a city name. Instructions on finding your city's City ID 
 [here](https://www.dmopress.com/openweathermap-howto/) ._
+
+
+### Calling from Conky
+
+I have a single line config for my secondary screen with the weather config 
+in it:
+
+`Now: ${execi 300 weather.sh -y} Forecast: ${execi 300 forecast.sh -y}`
+
+The conky output is currently limited via code to just the next five outputs.
 
 ## 5. Todo
 

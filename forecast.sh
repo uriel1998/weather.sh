@@ -9,6 +9,7 @@
 apiKey=""
 defaultLocation=""
 OpenBox="False"
+Conky="False"
 Terminal="False"
 HTML="False"
 degreeCharacter="c"
@@ -64,6 +65,8 @@ option="$1"
     shift ;;
     -o) OpenBox="True"
     shift ;;    
+    -y) Conky="True"
+    shift ;;        
     -f) degreeCharacter="f"
     shift ;;
     -c) 
@@ -190,12 +193,30 @@ while true; do
     NowHour=$(date +"%-H")
     NowLow=$((NowHour + 1))
     NowHigh=$((NowHour - 1))
-        
     if [ "$OpenBox" = "False" ];then
         if [ "$HTML" = "False" ];then
-            Terminal="True"
+            if [ "$Conky" = "False" ];then
+                Terminal="True"
+            fi
         fi
     fi
+    if [ "$Conky" = "True" ]; then
+        let i=0
+        bob=""
+        while [ $i -lt 5 ]; do 
+            CastDate=$(date +"%s" -d @${NixDate[$i]})
+            if [ $CastDate -le $TomorrowDate ]; then
+                ShortDate=$(date +"%R" -d @${NixDate[$i]})
+                bob=$(printf "%s %-4s%-2s %-4s " "$bob" "$ShortDate:" "${ShortWeather[$i]}" "${temperature[$i]}°${degreeCharacter^^}")
+            fi            
+            i=$((i + 1))
+        done
+    
+
+        #bob=$(echo "$icon $ShortWeather $temperature°${degreeCharacter^^}")
+        #bob 
+        echo "$bob"
+    fi    
     if [ "$Terminal" = "True" ];then
         if [ "$colors" = "True" ]; then
             echo "Forecast for $Station as of: ${YELLOW}$AsOf${RESTORE} "
