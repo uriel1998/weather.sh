@@ -85,9 +85,9 @@ then
     touch $dataPath
     #The API call is different if city ID is used instead of string lookup
     if [ "$CityID" = "True" ];then
-        data=$(curl "http://api.openweathermap.org/data/2.5/weather?id=$defaultLocation&units=metric&appid=$apiKey")
+        data=$(curl "http://api.openweathermap.org/data/2.5/weather?id=$defaultLocation&units=metric&appid=$apiKey" -s )
     else
-        data=$(curl "http://api.openweathermap.org/data/2.5/weather?q=$defaultLocation&units=metric&appid=$apiKey")
+        data=$(curl "http://api.openweathermap.org/data/2.5/weather?q=$defaultLocation&units=metric&appid=$apiKey" -s )
     fi
     echo $data > $dataPath
 else
@@ -99,9 +99,9 @@ while true; do
     lastfileupdate=$(date -r $dataPath +%s)
     if [ $(($(date +%s)-$lastfileupdate)) -ge 600 ];then
         if [ "$CityID" = "True" ];then
-            data=$(curl "http://api.openweathermap.org/data/2.5/weather?id=$defaultLocation&units=metric&appid=$apiKey")
+            data=$(curl "http://api.openweathermap.org/data/2.5/weather?id=$defaultLocation&units=metric&appid=$apiKey" -s )
         else
-            data=$(curl "http://api.openweathermap.org/data/2.5/weather?q=$defaultLocation&units=metric&appid=$apiKey")
+            data=$(curl "http://api.openweathermap.org/data/2.5/weather?q=$defaultLocation&units=metric&appid=$apiKey" -s )
         fi
         echo $data > $dataPath
     fi
@@ -260,9 +260,17 @@ while true; do
         fi
     fi
     if [ "$Conky" = "True" ]; then
-        bob=$(echo "$ShortWeather $temperature°${degreeCharacter^^}")
-        if [ "$FeelsLike" = "1" ];then
-            bob=$(echo "$bob/$FeelsLikeTemp°${degreeCharacter^^}")
+        if [ "$colors" = "True" ]; then
+            bob=$(echo "$ShortWeather $temperature°${degreeCharacter^^}")
+            if [ "$FeelsLike" = "1" ];then
+                bob=$(echo "$bob/$FeelsLikeTemp°${degreeCharacter^^}")
+            fi
+        else
+            bob=$(echo "$ShortWeather $temperature°${degreeCharacter^^}")
+            if [ "$FeelsLike" = "1" ];then
+                bob=$(echo "$bob/$FeelsLikeTemp°${degreeCharacter^^}")
+            fi
+
         fi
         echo "$bob"
     fi

@@ -201,17 +201,29 @@ while true; do
         fi
     fi
     if [ "$Conky" = "True" ]; then
-        let i=0
-        bob=""
-        while [ $i -lt 5 ]; do 
-            CastDate=$(date +"%s" -d @${NixDate[$i]})
-            if [ $CastDate -le $TomorrowDate ]; then
-                ShortDate=$(date +"%R" -d @${NixDate[$i]})
-                bob=$(printf "%s %-4s%-2s %-4s " "$bob" "$ShortDate:" "${ShortWeather[$i]}" "${temperature[$i]}°${degreeCharacter^^}")
-            fi            
-            i=$((i + 1))
-        done
-    
+        if [ "$colors" = "True" ]; then
+            let i=0
+            bob=""
+            while [ $i -lt 5 ]; do 
+                CastDate=$(date +"%s" -d @${NixDate[$i]})
+                if [ $CastDate -le $TomorrowDate ]; then
+                    ShortDate=$(date +"%R" -d @${NixDate[$i]})
+                    bob=$(printf "%s %-4s%-2s %-4s |" "$bob" "$ShortDate:" "${ShortWeather[$i]}" "${temperature[$i]}°${degreeCharacter^^}")
+                fi            
+                i=$((i + 1))        
+            done
+        else
+            let i=0
+            bob=""
+            while [ $i -lt 5 ]; do 
+                CastDate=$(date +"%s" -d @${NixDate[$i]})
+                if [ $CastDate -le $TomorrowDate ]; then
+                    ShortDate=$(date +"%R" -d @${NixDate[$i]})
+                    bob=$(printf "%s %-5s %-6s %-4s |" "$bob" "$ShortDate:" "${ShortWeather[$i]}" "${temperature[$i]}°${degreeCharacter^^}")
+                fi            
+                i=$((i + 1))
+            done
+        fi
 
         #bob=$(echo "$icon $ShortWeather $temperature°${degreeCharacter^^}")
         #bob 

@@ -70,12 +70,11 @@ chill, it is not displayed.
 
 ### weather_sh.rc
 
-Copy (and edit, as appropriate) the `weather_sh.rc` file to `$HOME\.config`.   
-The first line is the OpenWeatherMap API key  
-The second line is your default location. (See note below)  
-The third line is your default degree character (either `c` or `f`)  
-The fourth line is True or False depending on whether or not you want 
-icons displayed for the weather.
+Copy (and edit, as appropriate) the `weather_sh.rc` file to `$HOME\.config\weather_sh.rc`.   
+* The first line is the OpenWeatherMap API key  
+* The second line is your default location. (See note below)  
+* The third line is your default degree character (either `c` or `f`)  
+* The fourth line is True or False depending on whether or not you want icons displayed for the weather.
 
 ### Command-line options
 
