@@ -87,6 +87,8 @@ options:
  * `-h` Output HTML formatted text
  * `-o` Output OpenBox output
  * `-y` Output Conky format (no icons)
+ * `-n` Terminal output without icons
+ * `-p` Specify cache/temp path *with* trailing slash
  * `-f` Use imperial (farenheit, inches Hg, mph) units; default is metric
  * `-c` Use colored output in the terminal if `.bashcolors` is in the home 
  dir. Note that if you want to alter the colors, you will have to manually

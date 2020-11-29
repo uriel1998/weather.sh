@@ -58,6 +58,11 @@ option="$1"
     shift ;;    
     -f) degreeCharacter="f"
     shift ;;
+    -p) CachePath="$2"
+    shift
+    shift ;;
+    -n) UseIcons="False"
+    shift ;;
     -c) 
         if [ -f "$HOME/.bashcolors" ];then
             source "$HOME/.bashcolors"
@@ -66,6 +71,12 @@ option="$1"
     shift ;;
     esac
 done
+
+if [ -z "${CachePath}" ];then 
+    dataPath="/tmp/wth-$defaultLocation.json"
+else
+    dataPath="${CachePath}wth-$defaultLocation.json"
+fi
 
 if [ -z $apiKey ];then
     echo "No API Key specified in rc, script, or command line."
@@ -77,8 +88,6 @@ case $defaultLocation in
     ''|*[!0-9]*) CityID="False" ;;
     *) CityID="True" ;;
 esac
-
-dataPath="/tmp/wth-$defaultLocation.json"
 
 if [ ! -e $dataPath ];
 then
@@ -240,8 +249,12 @@ while true; do
             if [ "$FeelsLike" = "1" ];then
                 echo "Feels Like: ${RED}$FeelsLikeTemp°${degreeCharacter^^}${RESTORE}"
             fi
-            echo "Pressure: ${GREEN}$pressure$pressureunit${MAGENTA}"
-            echo -e \\u$winddir "$WindSpeed$windunit${RESTORE} Gusts: ${MAGENTA}$WindGusts$windunit${RESTORE}"
+            echo "Pressure: ${GREEN}$pressure$pressureunit${RESTORE}"
+            if [ "$UseIcons" = "True" ];then
+                echo -e \\u$winddir "${MAGENTA}$WindSpeed$windunit${RESTORE} Gusts: ${MAGENTA}$WindGusts$windunit${RESTORE}"
+            else
+                echo "Wind: ${MAGENTA}$WindSpeed$windunit${RESTORE} Gusts: ${MAGENTA}$WindGusts$windunit${RESTORE}"
+            fi
             echo "Humidity: ${GREEN}$Humidity%${RESTORE}"
             echo "Cloud Cover: ${GREEN}$CloudCover%${RESTORE}"        
         else

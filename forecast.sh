@@ -69,6 +69,11 @@ option="$1"
     shift ;;        
     -f) degreeCharacter="f"
     shift ;;
+    -n) UseIcons="False"
+    shift ;;    
+    -p) CachePath="$2"
+    shift
+    shift ;;    
     -c) 
         if [ -f "$HOME/.bashcolors" ];then
             source "$HOME/.bashcolors"
@@ -94,7 +99,12 @@ esac
 # Do we need a new datafile? If so, get it.
 ########################################################################
 
-dataPath="/tmp/fore-$defaultLocation.json"
+if [ -z "${CachePath}" ];then 
+    dataPath="/tmp/fore-$defaultLocation.json"
+else
+    dataPath="${CachePath}fore-$defaultLocation.json"
+fi
+
 if [ ! -e $dataPath ];then
     touch $dataPath
     if [ "$CityID" = "True" ];then
