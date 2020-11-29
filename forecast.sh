@@ -23,9 +23,16 @@ colors="False"
 ########################################################################
 # Reading in rc 
 ########################################################################
+ConfigFile="$HOME/.config/weather_sh.rc"
 
-if [ -f "$HOME/.config/weather_sh.rc" ];then
-    readarray -t line < "$HOME/.config/weather_sh.rc"
+if [ "$1" == "-r" ];then
+    shift
+    ConfigFile="$1"
+    shift
+fi
+
+if [ -f "$ConfigFile" ];then
+    readarray -t line < "$ConfigFile"
     apiKey=${line[0]}
     defaultLocation=${line[1]}
     degreeCharacter=${line[2]}
@@ -102,7 +109,7 @@ esac
 if [ -z "${CachePath}" ];then 
     dataPath="/tmp/fore-$defaultLocation.json"
 else
-    dataPath="${CachePath}fore-$defaultLocation.json"
+    dataPath="${CachePath}/fore-$defaultLocation.json"
 fi
 
 if [ ! -e $dataPath ];then
@@ -118,6 +125,13 @@ else
     data=$(cat $dataPath)
 fi
 
+    check=$(echo "$data" | grep -c -e '"cod":"40')
+    check2=$(echo "$data" | grep -c -e '"cod":"30')
+    sum=$(( $check + $check2 ))
+    if [ $sum -gt 0 ];then
+        exit 99
+    fi
+
 lastUpdateTime=$(($(date +%s) -600))
 
 while true; do
@@ -129,7 +143,10 @@ while true; do
             data=$(curl -s "http://api.openweathermap.org/data/2.5/forecast?q=$defaultLocation&units=metric&appid=$apiKey")
         fi
         echo $data > $dataPath
+    else
+        echo "Cache age: $(($(date +%s)-$lastfileupdate)) seconds."
     fi
+
     if [ $(($(date +%s)-$lastUpdateTime)) -ge 600 ]; then
         lastUpdateTime=$(date +%s)
         
