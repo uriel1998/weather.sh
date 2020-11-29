@@ -1,5 +1,11 @@
-* [2020-11-29 11:09:36 CDT] - -n and -p switches and docs for both HEAD -> master, tag: v1.0.0
-* [2020-10-11 22:23:10 CDT] - Pages gitlab/master, github/master, github/HEAD, fc/master
+* [2020-11-29 11:13:16 CDT] - remote-tracking branch 'refs/remotes/github/master' HEAD -> master, tag: v1.0.1, gitlab/master, github/master, github/HEAD, fc/master
+* [2020-10-11 22:42:57 CDT] - theme jekyll-theme-midnight
+* [2020-11-29 11:10:40 CDT] - changelog
+* [2020-11-29 11:09:36 CDT] - -n and -p switches and docs for both
+* [2020-11-29 11:10:40 CDT] - changelog
+* [2020-11-29 11:09:36 CDT] - -n and -p switches and docs for both tag: v1.0.0
+* [2020-10-11 22:42:57 CDT] - theme jekyll-theme-midnight
+* [2020-10-11 22:23:10 CDT] - Pages
 * [2020-10-11 21:28:14 CDT] - 7759fc9 N 2020-10-11 21:28:14 -0400 Steven Saus         pages
 * [2020-08-29 21:23:18 CDT] - up README;silence CURL tag: 0.9.9
 * [2019-06-20 19:08:50 CDT] - conky code for both forecast and output
