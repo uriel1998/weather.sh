@@ -1,4 +1,6 @@
-* [2020-11-29 11:13:16 CDT] - remote-tracking branch 'refs/remotes/github/master' HEAD -> master, tag: v1.0.1, gitlab/master, github/master, github/HEAD, fc/master
+* [2020-11-29 14:33:15 CDT] - resiliance and checks for proper city response HEAD -> master, tag: v1.0.2
+* [2020-11-29 11:14:14 CDT] - changelog gitlab/master, github/master, github/HEAD, fc/master
+* [2020-11-29 11:13:16 CDT] - remote-tracking branch 'refs/remotes/github/master' tag: v1.0.1
 * [2020-10-11 22:42:57 CDT] - theme jekyll-theme-midnight
 * [2020-11-29 11:10:40 CDT] - changelog
 * [2020-11-29 11:09:36 CDT] - -n and -p switches and docs for both
