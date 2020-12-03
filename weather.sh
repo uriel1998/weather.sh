@@ -122,7 +122,9 @@ while true; do
         fi
         echo $data > $dataPath
     else
-        echo "Cache age: $(($(date +%s)-$lastfileupdate)) seconds."
+        if [ "$Conky" != "True" ];then 
+            echo "Cache age: $(($(date +%s)-$lastfileupdate)) seconds."
+        fi
     fi
     check=$(echo "$data" | grep -c -e '"cod":"40')
     check2=$(echo "$data" | grep -c -e '"cod":"30')

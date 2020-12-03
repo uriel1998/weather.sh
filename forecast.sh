@@ -144,7 +144,9 @@ while true; do
         fi
         echo $data > $dataPath
     else
-        echo "Cache age: $(($(date +%s)-$lastfileupdate)) seconds."
+        if [ "$Conky" != "True" ];then 
+            echo "Cache age: $(($(date +%s)-$lastfileupdate)) seconds."
+        fi
     fi
 
     if [ $(($(date +%s)-$lastUpdateTime)) -ge 600 ]; then
