@@ -1,6 +1,9 @@
 # weather.sh and forecast.sh
+
 A bash script to get the weather and forecast from OpenWeatherMap and output 
-to the terminal, Openbox, or HTML
+to the terminal, Openbox, or HTML 
+
+Additionally, a way to put that information onto an image.
 
 ![Output example](https://raw.githubusercontent.com/uriel1998/weather.sh/master/example_output.png "Example output")
 
@@ -9,7 +12,8 @@ to the terminal, Openbox, or HTML
  2. [License](#2-license)
  3. [Prerequisites](#3-prerequisites)
  4. [How to use](#4-how-to-use)
- 5. [TODO](#5-todo)
+ 5. [weather_image](#5-weather_image)
+ 6. [TODO](#5-todo)
 
 ***
 
@@ -111,7 +115,14 @@ in it:
 
 The conky output is currently limited via code to just the next five outputs.
 
-## 5. Todo
+## 5. weather_image
+
+I have several applications that show screensavers of images. The ones I'd seen 
+where weather or time data was overlaid keep eventually crashing, so I thought 
+I'd expand my skills with imagemagick and create something where the data is 
+put into an image.  
+
+## 6. Todo
 
  * Add in sunrise/sunset
  * HTML colored output
