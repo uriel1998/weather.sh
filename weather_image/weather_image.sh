@@ -101,7 +101,7 @@ main() {
    
    # Applying the text and icon to the base image.
     /usr/bin/composite -gravity Southeast $TempDir/Text_Icon.png $TempDir/unsplash_blur.jpg $TempDir/weather.jpg
-    if [ ! -z $OutputFile ]; then
+    if [ -z $OutputFile ]; then
         cp $TempDir/weather.jpg $SCRIPT_DIR/output.jpg
     else
         cp $TempDir/weather.jpg ${OutputFile}
