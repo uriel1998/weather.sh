@@ -4,10 +4,6 @@
 
 apiKey=""
 defaultLocation=""
-Conky="False"
-OpenBox="False"
-Terminal="False"
-HTML="False"
 degreeCharacter="c"
 data=0
 lastUpdateTime=0
@@ -16,7 +12,9 @@ dynamicUpdates=0
 UseIcons="True"
 colors="False"
 CityID="True"
+icondata=""
 
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 ConfigFile="$HOME/.config/weather_sh.rc"
 
 if [ "$1" == "-r" ];then
@@ -56,14 +54,6 @@ option="$1"
     shift ;;
     -d) dynamicUpdates=1
     shift ;;
-    -t) Terminal="True"
-    shift ;;
-    -h) HTML="True"
-    shift ;;
-    -o) OpenBox="True"
-    shift ;;    
-    -y) Conky="True"
-    shift ;;    
     -f) degreeCharacter="f"
     shift ;;
     -p) CachePath="$2"
@@ -142,7 +132,7 @@ while true; do
         ####################################################################
         # Current conditions (and icon)
         ####################################################################
-        if [ "$UseIcons" = "True" ];then
+
             icons=$(echo $data | jq -r .weather[].icon | tr '\n' ' ')
             iconval=${icons%?}
             case $iconval in
@@ -156,9 +146,6 @@ while true; do
                 13*) icon="🌨";;
                 50*) icon="🌫";;
             esac
-        else
-            icon=""
-        fi
         ShortWeather=$(echo $data | jq -r .weather[].main | tr '\n' ' '| awk '{$1=$1};1' )
         LongWeather=$(echo $data | jq -r .weather[].description | sed -E 's/\S+/\u&/g' | tr '\n' ' '| awk '{$1=$1};1' )
 
@@ -249,92 +236,20 @@ while true; do
             pressureunit="hPa"
         fi
     fi
-    AsOf=$(date +"%Y-%m-%d %R" -d @$lastfileupdate) 
-    if [ "$OpenBox" = "False" ];then
-        if [ "$HTML" = "False" ];then
-            if [ "$Conky" = "False" ];then
-                Terminal="True"
-            fi
-        fi
+    #AsOf=$(date +"%Y-%m-%d %R" -d @$lastfileupdate) 
+    echo "${iconval}"
+    NowTime=$(date +"%H:%M")
+    echo "${LongWeather} at ${NowTime}"
+    
+    if [ "$FeelsLike" = "1" ];then
+        echo "$temperature deg ${degreeCharacter^^}, Feels $FeelsLikeTemp deg ${degreeCharacter^^}"
+    else
+        echo "Temp: $temperature deg ${degreeCharacter^^}"
     fi
-    if [ "$Terminal" = "True" ];then
-        if [ "$colors" = "True" ]; then
-            echo "Station: $Station, $Country $Lat / $Long"
-            echo "As Of: ${YELLOW}$AsOf ${RESTORE}"  
-            echo "Right Now: ${CYAN}$icon $LongWeather${RESTORE}"
-            #echo "$icon $ShortWeather"
-            echo "Temp: ${CYAN}$temperature°${degreeCharacter^^}${RESTORE}"
-            if [ "$FeelsLike" = "1" ];then
-                echo "Feels Like: ${RED}$FeelsLikeTemp°${degreeCharacter^^}${RESTORE}"
-            fi
-            echo "Pressure: ${GREEN}$pressure$pressureunit${RESTORE}"
-            if [ "$UseIcons" = "True" ];then
-                echo -e \\u$winddir "${MAGENTA}$WindSpeed$windunit${RESTORE} Gusts: ${MAGENTA}$WindGusts$windunit${RESTORE}"
-            else
-                echo "Wind: ${MAGENTA}$WindSpeed$windunit${RESTORE} Gusts: ${MAGENTA}$WindGusts$windunit${RESTORE}"
-            fi
-            echo "Humidity: ${GREEN}$Humidity%${RESTORE}"
-            echo "Cloud Cover: ${GREEN}$CloudCover%${RESTORE}"        
-        else
-            echo "Station: $Station, $Country $Lat / $Long"
-            echo "As Of: $AsOf "  
-            echo "Right Now: $icon $LongWeather"
-            #echo "$icon $ShortWeather"
-            echo "Temp: $temperature°${degreeCharacter^^}"
-            if [ "$FeelsLike" = "1" ];then
-                echo "Feels Like: $FeelsLikeTemp°${degreeCharacter^^}"
-            fi
-            echo "Pressure: $pressure$pressureunit"
-            echo -e \\u$winddir "$WindSpeed$windunit Gusts: $WindGusts$windunit"
-            echo "Humidity: $Humidity%"
-            echo "Cloud Cover: $CloudCover%"
-        fi
-    fi
-    if [ "$Conky" = "True" ]; then
-        if [ "$colors" = "True" ]; then
-            bob=$(echo "$ShortWeather $temperature°${degreeCharacter^^}")
-            if [ "$FeelsLike" = "1" ];then
-                bob=$(echo "$bob/$FeelsLikeTemp°${degreeCharacter^^}")
-            fi
-        else
-            bob=$(echo "$ShortWeather $temperature°${degreeCharacter^^}")
-            if [ "$FeelsLike" = "1" ];then
-                bob=$(echo "$bob/$FeelsLikeTemp°${degreeCharacter^^}")
-            fi
-
-        fi
-        echo "$bob"
-    fi
-    if [ "$OpenBox" = "True" ]; then
-        echo '<openbox_pipe_menu>' 
-        echo '<separator label="Weather" />' 
-        printf '<item label="Station: %s, %s" />\n' "$Station" "$Country"  
-        printf '<item label="As of %s" />\n' "$AsOf" 
-        printf '<item label="Now: %s %s" />\n' "$icon" "$LongWeather" 
-        printf '<item label="Temp: %s%s" />\n' "$temperature" "°${degreeCharacter^^}" 
-        if [ "$FeelsLike" = "1" ];then
-            printf '<item label="Feels Like: %s%s" />\n' "$FeelsLikeTemp" "°${degreeCharacter^^}" 
-        fi
-        printf '<item label="Pressure: %s%s" />\n' "$pressure" "$pressureunit" 
-        printf '<item label="Wind: %s%s Gusts: %s%s" />\n'  "$WindSpeed" "$windunit" "$WindGusts" "$windunit" 
-        printf '<item label="Humidity: %s%%" />\n' "$Humidity" 
-        printf '<item label="Cloud Cover: %s%%" />\n' "$CloudCover" 
-        echo '</openbox_pipe_menu>' 
-    fi
-    if [ "$HTML" = "True" ];then
-        echo "Station: $Station, $Country $Lat / $Long <br  />"  
-        echo "As Of: $AsOf <br  />"  
-        echo "Current Conditions: $icon $LongWeather <br  />" 
-        #echo "$icon $ShortWeather" 
-        echo "Temp: $temperature °${degreeCharacter^^} <br  />" 
-        if [ "$FeelsLike" = "1" ];then
-            echo "Feels Like: $FeelsLikeTemp °${degreeCharacter^^} <br  />"
-        fi
-        echo "Pressure: $pressure $pressureunit <br  />" 
-        echo -e \\u$winddir "$WindSpeed$windunit Gusts: $WindGusts$windunit <br  />" 
-        echo "Humidity: $Humidity% <br  />" 
-        echo "Cloud Cover: $CloudCover% <br  />"     
-    fi
+    echo "Pressure: $pressure$pressureunit"
+    echo "$WindSpeed$windunit ($WindGusts$windunit)"
+    echo "Humidity: $Humidity%"
+    echo "Cloud Cover: $CloudCover%"  
     if [ $dynamicUpdates -eq 0 ];then
         break
     fi    

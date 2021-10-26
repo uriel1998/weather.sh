@@ -13,21 +13,42 @@ declare Fortune
 #create tempfile2  (for text image )
 #TempDir=$(mktemp -d)
 
+
 TempDir=/home/steven/tmp
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+            #cp ${SCRIPT_DIR}/${icons%?}.png 
 
 ################################################################################
 # Wherein things get told to happen
 ################################################################################
 main() {
-	bob=`wget https://picsum.photos/1920/1080/?random -O $TempDir/unsplash.jpg`
-	convert $TempDir/unsplash.jpg -blur 0x3 $TempDir/unsplash_blur.jpg
-	Fortune=$(/home/steven/bin/weather.sh -n | tail -6 | sed 's/°/ deg /g' | sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' | grep -v "Cache")
-	/usr/bin/convert -background none -fill white -stroke black -strokewidth 2 -gravity Southeast -font Interstate -size 1920x400 \
-          caption:"$Fortune" \
+	
+    
+    # Obtain source image
+    bob=`wget https://picsum.photos/1920/1080/?random -O $TempDir/unsplash.jpg`
+	
+    # Blur, if desired.
+    convert $TempDir/unsplash.jpg -blur 0x3 $TempDir/unsplash_blur.jpg
+
+    # Get our text and make it into an image
+	DataInfo=$(${SCRIPT_DIR}/weather.sh | grep -v "Cache")
+    IconData=$(echo "$DataInfo" | head -1)
+    TextData=$(echo "$DataInfo" | tail -6)
+    cp ${SCRIPT_DIR}/icons/"$IconData".png ${TempDir}/WeatherIcon.png
+	/usr/bin/convert -background none -fill white -stroke black -strokewidth 2 -gravity Southeast -font Abydos -size 800x400 \
+          caption:"$TextData" \
           -gravity Southwest \
           $TempDir/TextImage.png
 
-    /usr/bin/composite -gravity Southwest $TempDir/TextImage.png $TempDir/unsplash_blur.jpg $TempDir/weather_background.jpg
+    # Applying the appropriate icon to the image.  This has to be done in 
+    # steps for the transparency to keep working.
+    
+    /usr/bin/composite -gravity Center $TempDir/WeatherIcon.png -gravity Southwest $TempDir/TextImage.png $TempDir/Text_Icon.png
+   
+   # Applying the text and icon to the base image.
+   
+    /usr/bin/composite -gravity Southeast $TempDir/Text_Icon.png $TempDir/unsplash_blur.jpg $TempDir/weather.jpg
+    
         
       
 
