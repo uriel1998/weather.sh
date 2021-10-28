@@ -103,7 +103,7 @@ main() {
 	if [ -z "${ImageFile}" ];then
         wget_bin=$(which wget)
         # Obtain source image
-        execstring="${wget_bin} https://picsum.photos/${UnsplashWidth}/${UnsplashHeight}/?random -O ${TempDir}/unsplash.jpg"
+        execstring="${wget_bin} https://picsum.photos/${UnsplashWidth}/${UnsplashHeight}/?random -qO ${TempDir}/unsplash.jpg"
         eval "$execstring"
 	else
         cp "${ImageFile}" "${TempDir}"/unsplash.jpg
@@ -178,7 +178,7 @@ main() {
         main $n $RandoRun
         n=$(( n+1 ))
     done
-    printf "/n"
+    printf "\n"
 
 rm "${TempDir}"/TextImage.png
 rm "${TempDir}"/unsplash_blur.jpg
