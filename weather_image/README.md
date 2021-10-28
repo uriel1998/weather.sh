@@ -38,7 +38,10 @@ from `weather.sh` to minimize API calls if you're running both.
 
 ## 2. License
 
-This project is licensed under the MIT license. For the full license, see `LICENSE`.
+This project's *code* and *documentation* is licensed under the MIT license. For the full license, see `LICENSE`.
+
+The *artwork* in the `icons` subdirectory is from the (free for commercial use) 
+[Weather Color icon set by Sihan Liu](https://www.iconfinder.com/iconsets/weather-color-2).  
 
 ## 3. Prerequisites
 
@@ -60,8 +63,23 @@ This project is licensed under the MIT license. For the full license, see `LICEN
  
 ## 4. How to use
 
-Run `weather_images.sh` or `forecast.sh` with the appropriate commandline 
+Once installed, run `weather_images.sh` or `forecast.sh` with the appropriate commandline 
 switches (below). 
+
+### Installation
+
+Clone the repository locally from the main directory.  If you do not wish to clone the whole repository, 
+go to the directory you wish to clone into, and perform the following (solution from 
+[here](https://stackoverflow.com/questions/600079/how-do-i-clone-a-subdirectory-only-of-a-git-repository):
+
+```
+    git clone --depth 1 --filter=blob:none --sparse https://github.com/uriel1998/weather.sh 
+    cd weather.sh
+    git sparse-checkout set weather_image
+
+```
+
+Set up `weather_sh.rc`
 
 ### weather_sh.rc
 
@@ -73,6 +91,7 @@ Copy (and edit, as appropriate) the `weather_sh.rc` file to `$HOME\.config\weath
 * The second line is your default location. (See note below)  
 * The third line is your default degree character (either `c` or `f`)  
 * The fourth line is True or False depending on whether or not you want icons displayed for the weather.
+* The fifth line has no effect with `weather_image.sh`, only for `weather.sh`.
 
 ### Command-line options
 

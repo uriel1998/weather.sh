@@ -79,6 +79,7 @@ Copy (and edit, as appropriate) the `weather_sh.rc` file to `$HOME\.config\weath
 * The second line is your default location. (See note below)  
 * The third line is your default degree character (either `c` or `f`)  
 * The fourth line is True or False depending on whether or not you want icons displayed for the weather.
+* The fifth line is whether to use `bashcolors`.
 
 ### Command-line options
 
