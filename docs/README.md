@@ -1,6 +1,9 @@
 # weather.sh and forecast.sh
+
 A bash script to get the weather and forecast from OpenWeatherMap and output 
-to the terminal, Openbox, or HTML
+to the terminal, Openbox, or HTML 
+
+Additionally, a way to put that information onto an image (see the `weather_image` subdirectory).
 
 ![Output example](https://raw.githubusercontent.com/uriel1998/weather.sh/master/example_output.png "Example output")
 
@@ -9,7 +12,8 @@ to the terminal, Openbox, or HTML
  2. [License](#2-license)
  3. [Prerequisites](#3-prerequisites)
  4. [How to use](#4-how-to-use)
- 5. [TODO](#5-todo)
+ 5. [weather_image](#5-weather_image)
+ 6. [TODO](#6-todo)
 
 ***
 
@@ -75,6 +79,7 @@ Copy (and edit, as appropriate) the `weather_sh.rc` file to `$HOME\.config\weath
 * The second line is your default location. (See note below)  
 * The third line is your default degree character (either `c` or `f`)  
 * The fourth line is True or False depending on whether or not you want icons displayed for the weather.
+* The fifth line is whether to use `bashcolors`.
 
 ### Command-line options
 
@@ -111,7 +116,11 @@ in it:
 
 The conky output is currently limited via code to just the next five outputs.
 
-## 5. Todo
+## 5. weather_image
+
+Please see the [weather_image](https://github.com/uriel1998/weather.sh/tree/master/weather_image) subdirectory.
+
+## 6. Todo
 
  * Add in sunrise/sunset
  * HTML colored output
