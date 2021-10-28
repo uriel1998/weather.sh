@@ -93,6 +93,7 @@ Copy (and edit, as appropriate) the `weather_sh.rc` file to `$HOME\.config\weath
 * The fourth line is True or False depending on whether or not you want icons displayed for the weather.
 * The fifth line has no effect with `weather_image.sh`, only for `weather.sh`.
 
+
 ### Command-line options
 
 By default, `weather_image.sh` :
@@ -101,25 +102,7 @@ By default, `weather_image.sh` :
 * outputs file(s) to `out.jpg` in the *script directory*.
 * attempts to use the following fonts, in this order: [Interstate](https://dafontfamily.com/interstate-font-free-download/), [Ubuntu](https://www.1001freefonts.com/ubuntu.font), and [Arial](https://www.cufonfonts.com/font/arial).
 
-**IMPORTANT**  
-If it cannot find the font you chose or any of the three listed above, it will choose a RANDOM font using `fc-list`.  
-
-**IMPORTANT**  
-If you choose a font family with a space in the name, it will choose a random 
-font *from that family*, along with the following warning:
-
-```
-There is a space in your font family. Because of the way imagemagick
-handles fonts, please use the *filename* of the font, by typing 
-fc-list | grep -i "Font Family" and choosing the filename as displayed. 
-We are now going to try to choose a random font from that family.
-
-```
-
-You can see examples of these three default fonts at the bottom of the page.
-
-Please note that while `weather_image.sh` will do its best to find an appropriate 
-size and placement for the icon, some font families will work better than others. 
+See below for information about customizing fonts and/or iconsets.
 
 `weather_image.sh` can be started with the following command line 
 options:
@@ -134,6 +117,38 @@ options:
  * `-w ###` : height if sourced from pixabay 
  * `-o [full path]` : specify output file 
  * `-f [font family name]` : specify font family to use
+
+### Customization
+
+#### Icon Sets
+
+You can substitute in any images in PNG format, they just need to be located 
+and named the same as the ones in the `icons` subdirectory.  
+
+#### Fonts
+
+**IMPORTANT**  
+If it cannot find the font you chose or any of the three default fonts, it will 
+choose a RANDOM font using `fc-list`.  
+
+**IMPORTANT**  
+If you choose a font family with a space in the name, it will choose a random 
+font *from that family*, along with the following warning:
+
+```
+There is a space in your font family. Because of the way imagemagick
+handles fonts, please use the *filename* of the font, by typing 
+fc-list | grep -i "Font Family" and choosing the filename as displayed. 
+We are now going to try to choose a random font from that family.
+
+```
+
+This is probably a limitation based on my coding skill; pull requests welcomed.
+
+You can see examples of these three default fonts at the bottom of the page.
+
+Please note that while `weather_image.sh` will do its best to find an appropriate 
+size and placement for the text and icon, some font families will work better than others. 
  
 ### Examples
  
@@ -161,5 +176,3 @@ Black font, and pulling the source image from pixabay with no blur effect.
 ![Ubuntu](https://github.com/uriel1998/weather.sh/raw/master/weather_image/ubuntu_font.jpg "Example Ubuntu font output")  
 
 ![Arial](https://github.com/uriel1998/weather.sh/raw/master/weather_image/arial_font.jpg "Example Arial font output")  
-
-

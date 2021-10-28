@@ -13,7 +13,7 @@ Additionally, a way to put that information onto an image.
  3. [Prerequisites](#3-prerequisites)
  4. [How to use](#4-how-to-use)
  5. [weather_image](#5-weather_image)
- 6. [TODO](#5-todo)
+ 6. [TODO](#6-todo)
 
 ***
 
@@ -118,10 +118,7 @@ The conky output is currently limited via code to just the next five outputs.
 
 ## 5. weather_image
 
-I have several applications that show screensavers of images. The ones I'd seen 
-where weather or time data was overlaid keep eventually crashing, so I thought 
-I'd expand my skills with imagemagick and create something where the data is 
-put into an image.  
+Please see the [weather_image](https://github.com/uriel1998/weather.sh/tree/master/weather_image) subdirectory.
 
 ## 6. Todo
 
