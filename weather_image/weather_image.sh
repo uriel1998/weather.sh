@@ -6,7 +6,22 @@ TempDir=$(mktemp -d)
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 BlurVar=""
 FD_FIND=$(which fdfind)
+# Going to do programmer style counting, starting at 0 here.
+NumOutput=0  
 
+get_image () {
+            if [ -f "$FD_FIND" ];then
+                ImageFile=$(fdfind . "$ImageDir" --follow --type file --extension png --extension jpg | shuf -n 1 )
+            fi
+            if [ ! -f "${ImageFile}" ];then
+                ImageFile=$(find "$ImageDir" -type f  -iname "*.jpg" -or -iname "*.png" -printf '%h\n' | shuf -n 1 )
+            fi
+            if [ ! -f "${ImageFile}" ];then
+                ImageFile=""
+            fi
+}
+
+# -n ### number of output images to make
 # -b add blur
 # -d image directory to choose from
 # -i image file to use
@@ -19,37 +34,38 @@ option="$1"
     in
         -b) BlurVar="True"
         shift ;;
-        -d) ImageDir="$2"
-        if [ ! -d "${ImageDir}" ];then
-            ImageFile=""
-        else
-            if [ -f "$FD_FIND" ];then
-                ImageFile=$(fdfind . "$ImageDir" --follow --type file --extension png --extension jpg | shuf -n 1 )
+        -n) 
+            NumOutput="$2"
+            shift
+            shift;;
+        -d) 
+            ImageDir="$2"
+            if [ ! -d "${ImageDir}" ];then
+                ImageFile=""
+            else
+                get_image
+                if [ ! -f "${ImageFile}" ];then
+                    ImageFile=""
+                fi
             fi
-            if [ ! -f "${ImageFile}" ];then
-                ImageFile=$(find "$ImageDir" -type f  -iname "*.jpg" -or -iname "*.png" -printf '%h\n' | shuf -n 1 )
-            fi
+            shift
+            shift ;;
+        -i) 
+            ImageFile="$2"
             if [ ! -f "${ImageFile}" ];then
                 ImageFile=""
             fi
-        fi
-        shift
-        shift ;;
-        -i) ImageFile="$2"
-        if [ ! -f "${ImageFile}" ];then
-            ImageFile=""
-        fi
-        shift
-        shift ;;
-        -w) UnsplashWidth="$2"
-        shift
-        shift ;;    
-        -h) UnsplashHeight="$2"
-        shift
-        shift ;;
-        -o) OutputFile="$2"
-        shift
-        shift ;;
+            shift
+            shift ;;
+            -w) UnsplashWidth="$2"
+            shift
+            shift ;;    
+            -h) UnsplashHeight="$2"
+            shift
+            shift ;;
+            -o) OutputFile="$2"
+            shift
+            shift ;;
     esac
 done
 
@@ -66,8 +82,10 @@ fi
 # Wherein things get told to happen
 ################################################################################
 main() {
+    
+    LOOP=$(printf "%03g" "$1")
+    get_image
 	if [ -z "${ImageFile}" ];then
-    echo "hi"
         wget_bin=$(which wget)
         # Obtain source image
         execstring="${wget_bin} https://picsum.photos/${UnsplashWidth}/${UnsplashHeight}/?random -O ${TempDir}/unsplash.jpg"
@@ -86,8 +104,16 @@ main() {
     ImageSize=$(identify "${TempDir}"/unsplash_blur.jpg  | awk '{print $3}')
     ImageWidth=$(echo "${ImageSize}" | awk -F 'x' '{print $1}')
     ImageHeight=$(echo "${ImageSize}" | awk -F 'x' '{print $2}')
-    TextWidth=$(( "$ImageWidth" / 2 ))
+    # because otherwise the text gets squashed
+    if [ "$ImageWidth" -le 1300 ];then
+        TextWidth=$(( "$ImageWidth" / 3 ))
+        TextWidth=$(( "$TextWidth" * 2 ))
+    else
+        TextWidth=$(( "$ImageWidth" / 2 ))
+    fi
     TextHeight=$(( "$ImageHeight" / 2 ))
+    
+    
     
     # Get our text and make it into an image
 	DataInfo=$("${SCRIPT_DIR}"/weather.sh | grep -v "Cache")
@@ -106,21 +132,33 @@ main() {
    # Applying the text and icon to the base image.
     /usr/bin/composite -gravity Southeast "${TempDir}"/Text_Icon.png "${TempDir}"/unsplash_blur.jpg "${TempDir}"/weather.jpg
     if [ -z "${OutputFile}" ]; then
-        cp "${TempDir}"/weather.jpg "${SCRIPT_DIR}"/output.jpg
+        cp "${TempDir}"/weather.jpg "${SCRIPT_DIR}"/output_${LOOP}.jpg
     else
-        cp "${TempDir}"/weather.jpg "${OutputFile}"
+        if [ $NumOutput = 0 ];then
+            cp "${TempDir}"/weather.jpg "${OutputFile}"
+        else
+            OutDir=$(dirname ${OutputFile})
+            OutExt="${OutputFile##*.}"
+            Out_File="${OutputFile%.*}"
+            cp "${TempDir}"/weather.jpg "${Out_File}"_"${LOOP}"."${OutExt}"
+        fi
     fi
     
-	exit 0
-}
 
-main
+}
+    
+    n=0
+    while [ $n -le "$NumOutput" ]; do
+        main $n
+        n=$(( n+1 ))
+    done
+
 
 rm "${TempDir}"/TextImage.png
 rm "${TempDir}"/unsplash_blur.jpg
 rm "${TempDir}"/unsplash.jpg
 rm "${TempDir}"/WeatherIcon.png
-rmdir "${TempDir}"
+rm -rf "${TempDir}"
 
 
 
