@@ -48,6 +48,7 @@ This project is licensed under the MIT license. For the full license, see `LICEN
  package on major Linux distributions.  
  * `wget` command-line tool for getting data using HTTP protocol. cURL can be 
  found in the `wget` package on major Linux distributions.  
+ * An appropriate font.
 
 ## 4. How to use
 
@@ -67,8 +68,14 @@ Copy (and edit, as appropriate) the `weather_sh.rc` file to `$HOME\.config\weath
 
 ### Command-line options
 
-By default, `weather_image.sh` sources all images from pixabay and will output 
-files to `out.jpg` in the *script directory*.
+By default, `weather_image.sh` :
+
+* sources all images from pixabay 
+* outputs file(s) to `out.jpg` in the *script directory*.
+* attempts to use the following fonts, in this order: [Interstate](https://dafontfamily.com/interstate-font-free-download/), [Ubuntu](https://www.1001freefonts.com/ubuntu.font), and [Arial](https://www.cufonfonts.com/font/arial).
+
+Please note that while `weather_image.sh` will do its best to find an appropriate 
+size and placement for the icon, some font families will work better than others. 
 
 `weather_image.sh` can be started with the following command line 
 options:
@@ -82,6 +89,7 @@ options:
  * `-h ###` : height if sourced from pixabay
  * `-w ###` : height if sourced from pixabay 
  * `-o [full path]` : specify output file 
+ * `-f [font family name]` : specify font family to use
  
 ## 5. Todo
 

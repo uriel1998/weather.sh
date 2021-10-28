@@ -10,6 +10,7 @@ FD_FIND=$(which fdfind)
 NumOutput=0  
 OccasionalRandom=""
 RandoRun=""
+FontFamily=""
 
 get_image () {
             if [ -f "$FD_FIND" ];then
@@ -28,7 +29,7 @@ print_help (){
 
     echo " # USAGE: weather_images.sh [options]"
     echo " Defaults are to source the image from pixabay and output to "
-    echo " out.jpg in the script's directory."
+    echo " out.jpg in the script's directory with Interstate font."
     echo " ## TOGGLES:"
     echo " -b : add blur"
     echo " -r : occasionally mix in random image from internet (every third)"
@@ -40,17 +41,44 @@ print_help (){
     echo " -h ### : height if sourced from pixabay"
     echo " -w ### : height if sourced from pixabay "
     echo " -o [full path] : specify output file "
+    echo " -f [font family] : specify font family to use "
     exit 0
     
 }
 
-#TODO - check fonts
-# fc-list | grep -i "nimbus"
+check_fonts (){
+    fontexists=""
+    if [ -n "$FontFamily" ];then 
+        fontexists=$(fc-list | grep -ci "$FontFamily")
+    fi
+    if [ -z "$fontexists" ];then
+        FontFamily="Interstate"
+        fontexists=$(fc-list | grep -ci "$FontFamily")
+        if [ -z "$fontexists" ];then
+            FontFamily="Ubuntu"
+            fontexists=$(fc-list | grep -ci "$FontFamily")
+            if [ -z "$fontexists" ];then
+                FontFamily="Arial"
+                fontexists=$(fc-list | grep -ci "$FontFamily")
+                
+                # I've tried what was given with no dice, so I'm picking one at random
+                if [ -z "$fontexists" ];then
+                    FontFamily=$(fc-list | shuf -n 1 | awk -F ':' '{ print $2 }' | awk '{$1=$1;print}')
+                fi
+            fi
+        fi
+    fi
+    echo "Using the $FontFamily font."
+}
 
 while [ $# -gt 0 ]; do
 option="$1"
     case $option
     in
+        -f)           
+            FontFamily="$2"
+            shift
+            shift;;
         -r) 
             OccasionalRandom=true
             shift ;;
@@ -108,7 +136,7 @@ if [ -z "${UnsplashWidth}" ];then
     UnsplashWidth="1920"
 fi
 
-
+check_fonts
 
 ################################################################################
 # Wherein things get told to happen
@@ -157,7 +185,7 @@ main() {
     IconData=$(echo "$DataInfo" | head -1)
     TextData=$(echo "$DataInfo" | tail -6)
     cp "${SCRIPT_DIR}"/icons/"$IconData".png "${TempDir}"/WeatherIcon.png
-	/usr/bin/convert -background none -fill white -stroke black -strokewidth 2 -gravity Southeast -font Interstate -size "$TextWidth"x"$TextHeight" \
+	/usr/bin/convert -background none -fill white -stroke black -strokewidth 2 -gravity Southeast -font "${FontFamily}" -size "$TextWidth"x"$TextHeight" \
           caption:"$TextData" \
           -gravity Southwest \
           "${TempDir}"/TextImage.png
@@ -169,12 +197,11 @@ main() {
    # Applying the text and icon to the base image.
     /usr/bin/composite -gravity Southeast "${TempDir}"/Text_Icon.png "${TempDir}"/unsplash_blur.jpg "${TempDir}"/weather.jpg
     if [ -z "${OutputFile}" ]; then
-        cp "${TempDir}"/weather.jpg "${SCRIPT_DIR}"/output_${LOOP}.jpg
+        cp "${TempDir}"/weather.jpg "${SCRIPT_DIR}"/output_"${LOOP}".jpg
     else
-        if [ $NumOutput = 0 ];then
+        if [ "$NumOutput" = 0 ];then
             cp "${TempDir}"/weather.jpg "${OutputFile}"
         else
-            OutDir=$(dirname ${OutputFile})
             OutExt="${OutputFile##*.}"
             Out_File="${OutputFile%.*}"
             cp "${TempDir}"/weather.jpg "${Out_File}"_"${LOOP}"."${OutExt}"
@@ -190,7 +217,7 @@ main() {
     while [ $n -le "$NumOutput" ]; do
         if [ "$OccasionalRandom" = "true" ] && [ $n -ne 0 ];then
             RandoRun=""
-            if ! (( $n % 3 )) ; then
+            if ! (( "$n" % 3 )) ; then
                 # forcing random pull
                 RandoRun="true"
                 ImageFile=""
