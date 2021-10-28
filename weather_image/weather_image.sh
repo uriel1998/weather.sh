@@ -8,6 +8,7 @@ BlurVar=""
 FD_FIND=$(which fdfind)
 # Going to do programmer style counting, starting at 0 here.
 NumOutput=0  
+OccasionalRandom=""
 
 get_image () {
             if [ -f "$FD_FIND" ];then
@@ -28,12 +29,17 @@ get_image () {
 # -h height if sourced from pixabay
 # -w height if sourced from pixabay 
 # -o output file (defaults to PWD/out.jpg)
+# -r occasionally mix in random image from internet (every third)
 while [ $# -gt 0 ]; do
 option="$1"
     case $option
     in
-        -b) BlurVar="True"
-        shift ;;
+        -r) 
+            Occasional_Random=true
+            shift ;;
+        -b) 
+            BlurVar="True"
+            shift ;;
         -n) 
             NumOutput="$2"
             shift
@@ -57,13 +63,16 @@ option="$1"
             fi
             shift
             shift ;;
-            -w) UnsplashWidth="$2"
+        -w) 
+            UnsplashWidth="$2"
             shift
             shift ;;    
-            -h) UnsplashHeight="$2"
+        -h) 
+            UnsplashHeight="$2"
             shift
             shift ;;
-            -o) OutputFile="$2"
+        -o)
+            OutputFile="$2"
             shift
             shift ;;
     esac
@@ -146,9 +155,17 @@ main() {
     
 
 }
+
+################################### CONTROL PORTION ##########################
     
     n=0
     while [ $n -le "$NumOutput" ]; do
+        if [ -n "$OccasionalRandom" ];then
+            if [ ! (( $n % 3 )) ]; then
+                # forcing random pull
+                ImageFile=""
+            fi
+        fi
         main $n
         n=$(( n+1 ))
     done
