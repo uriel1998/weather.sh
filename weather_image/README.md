@@ -94,4 +94,3 @@ options:
 ## 5. Todo
 
  * Options for how often images are sourced from the internet
- * Variable for font, perhaps?  It's on line 157...
