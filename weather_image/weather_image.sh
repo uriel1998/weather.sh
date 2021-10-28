@@ -23,14 +23,27 @@ get_image () {
             fi
 }
 
-# -n ### number of output images to make
-# -b add blur
-# -d image directory to choose from
-# -i image file to use
-# -h height if sourced from pixabay
-# -w height if sourced from pixabay 
-# -o output file (defaults to PWD/out.jpg)
-# -r occasionally mix in random image from internet (every third)
+
+print_help (){
+
+    echo " # USAGE: weather_images.sh [options]"
+    echo " Defaults are to source the image from pixabay and output to "
+    echo " out.jpg in the script's directory."
+    echo " ## TOGGLES:"
+    echo " -b : add blur"
+    echo " -r : occasionally mix in random image from internet (every third)"
+    echo " -help | -? : show help text"
+    echo " ## SWITCHES THAT NEED MORE INPUT AFTER THEM " 
+    echo " -n ### : the number of output images to make (autonumbered)"
+    echo " -d [directory] : image directory to choose from"
+    echo " -i [file] : specific image file to use"
+    echo " -h ### : height if sourced from pixabay"
+    echo " -w ### : height if sourced from pixabay "
+    echo " -o [full path] : specify output file "
+    exit 0
+    
+}
+
 while [ $# -gt 0 ]; do
 option="$1"
     case $option
@@ -67,9 +80,15 @@ option="$1"
         -w) 
             UnsplashWidth="$2"
             shift
-            shift ;;    
+            shift ;;  
+        "-?"|"-help") 
+            print_help
+            ;;
         -h) 
             UnsplashHeight="$2"
+            if [ -z "$UnsplashHeight" ];then
+                print_help
+            fi
             shift
             shift ;;
         -o)
