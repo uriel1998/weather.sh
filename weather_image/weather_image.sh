@@ -44,6 +44,9 @@ print_help (){
     
 }
 
+#TODO - check fonts
+# fc-list | grep -i "nimbus"
+
 while [ $# -gt 0 ]; do
 option="$1"
     case $option
@@ -139,7 +142,7 @@ main() {
     ImageWidth=$(echo "${ImageSize}" | awk -F 'x' '{print $1}')
     ImageHeight=$(echo "${ImageSize}" | awk -F 'x' '{print $2}')
     # because otherwise the text gets squashed
-    if [ "$ImageWidth" -le 1300 ];then
+    if [ "$ImageWidth" -le 1366 ];then
         TextWidth=$(( "$ImageWidth" / 3 ))
         TextWidth=$(( "$TextWidth" * 2 ))
     else
@@ -154,7 +157,7 @@ main() {
     IconData=$(echo "$DataInfo" | head -1)
     TextData=$(echo "$DataInfo" | tail -6)
     cp "${SCRIPT_DIR}"/icons/"$IconData".png "${TempDir}"/WeatherIcon.png
-	/usr/bin/convert -background none -fill white -stroke black -strokewidth 2 -gravity Southeast -font Abydos -size "$TextWidth"x"$TextHeight" \
+	/usr/bin/convert -background none -fill white -stroke black -strokewidth 2 -gravity Southeast -font Interstate -size "$TextWidth"x"$TextHeight" \
           caption:"$TextData" \
           -gravity Southwest \
           "${TempDir}"/TextImage.png
