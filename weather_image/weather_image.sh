@@ -5,6 +5,7 @@
 TempDir=$(mktemp -d)
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 BlurVar=""
+FD_FIND=$(which fdfind)
 
 # -b add blur
 # -d image directory to choose from
@@ -22,8 +23,11 @@ option="$1"
         if [ ! -d "${ImageDir}" ];then
             ImageFile=""
         else
-            find -H "$ImageDir" -type f  -iname ".jpg" -iname ".png" 
-            ImageFile=$(fdfind . "${ImageDir}" --follow --type file --extension png --extension jpg | sort -R | head -1)
+            if [ -f "$FD_FIND" ];then
+                ImageFile=$(fdfind . "$ImageDir" --follow --type file --extension png --extension jpg | sort -R - | head -1)
+            else
+                ImageFile=$(find "$ImageDir" -type f  -iname "*.jpg" -or -iname "*.png" -printf '%h\n' |  sort -R - | head -1)
+            fi
             if [ ! -f "${ImageFile}" ];then
                 ImageFile=""
             fi
