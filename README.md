@@ -3,7 +3,7 @@
 A bash script to get the weather and forecast from OpenWeatherMap and output 
 to the terminal, Openbox, or HTML 
 
-Additionally, a way to put that information onto an image.
+Additionally, a way to put that information onto an image (see the `weather_image` subdirectory).
 
 ![Output example](https://raw.githubusercontent.com/uriel1998/weather.sh/master/example_output.png "Example output")
 
