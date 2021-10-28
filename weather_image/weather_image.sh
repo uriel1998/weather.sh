@@ -24,9 +24,10 @@ option="$1"
             ImageFile=""
         else
             if [ -f "$FD_FIND" ];then
-                ImageFile=$(fdfind . "$ImageDir" --follow --type file --extension png --extension jpg | sort -R - | head -1)
-            else
-                ImageFile=$(find "$ImageDir" -type f  -iname "*.jpg" -or -iname "*.png" -printf '%h\n' |  sort -R - | head -1)
+                ImageFile=$(fdfind . "$ImageDir" --follow --type file --extension png --extension jpg | shuf -n 1 )
+            fi
+            if [ ! -f "${ImageFile}" ];then
+                ImageFile=$(find "$ImageDir" -type f  -iname "*.jpg" -or -iname "*.png" -printf '%h\n' | shuf -n 1 )
             fi
             if [ ! -f "${ImageFile}" ];then
                 ImageFile=""
