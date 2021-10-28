@@ -11,6 +11,7 @@ for backgrounds and screensavers with the time and weather embedded in it.
  3. [Prerequisites](#3-prerequisites)
  4. [How to use](#4-how-to-use)
  5. [TODO](#5-todo)
+ 6. [Screenshots](#6-screenshots)
 
 ***
 
@@ -48,10 +49,15 @@ This project is licensed under the MIT license. For the full license, see `LICEN
  package on major Linux distributions.  
  * `wget` command-line tool for getting data using HTTP protocol. Can be 
  found in the `wget` package on major Linux distributions.  
- * `fc-list` command-line tool for listing fonts on the system. cURL can be 
+ * `fc-list` command-line tool for listing fonts on the system. `fc-list` can be 
  found in the `fontconfig` package on major Linux distributions.  
- * An appropriate font.
-
+ * `find` command-line tool for finding files on the system. `find` can be 
+ found in the `findutils` package on major Linux distributions.  
+ * OPTIONAL: `fd-find` as a drop-in for `find`.  `fd-find` can be found in the 
+ `fd-find` package on major Linux distributions.  This program looks for the 
+ binary to be named `fdfind`, *not* `fd` (Debian style).
+ * An appropriate font.  
+ 
 ## 4. How to use
 
 Run `weather_images.sh` or `forecast.sh` with the appropriate commandline 
@@ -60,7 +66,7 @@ switches (below).
 ### weather_sh.rc
 
 If you already have a working installation of [weather.sh](https://uriel1998.github.io/weather.sh/), 
-then you can skip this section.
+then you can skip to "Command-line options".
 
 Copy (and edit, as appropriate) the `weather_sh.rc` file to `$HOME\.config\weather_sh.rc`.   
 * The first line is the OpenWeatherMap API key  
@@ -76,7 +82,20 @@ By default, `weather_image.sh` :
 * outputs file(s) to `out.jpg` in the *script directory*.
 * attempts to use the following fonts, in this order: [Interstate](https://dafontfamily.com/interstate-font-free-download/), [Ubuntu](https://www.1001freefonts.com/ubuntu.font), and [Arial](https://www.cufonfonts.com/font/arial).
 
-**If it cannot find the font you chose or any of the three listed above, it will choose a RANDOM font using fc-list**
+**IMPORTANT**  
+If it cannot find the font you chose or any of the three listed above, it will choose a RANDOM font using `fc-list`.  
+
+**IMPORTANT**  
+If you choose a font family with a space in the name, it will choose a random 
+font *from that family*, along with the following warning:
+
+```
+There is a space in your font family. Because of the way imagemagick
+handles fonts, please use the *filename* of the font, by typing 
+fc-list | grep -i "Font Family" and choosing the filename as displayed. 
+We are now going to try to choose a random font from that family.
+
+```
 
 You can see examples of these three default fonts at the bottom of the page.
 
@@ -89,13 +108,28 @@ options:
  * `-b` : add blur  
  * `-r` : occasionally mix in random image from pixabay (hardcoded to every third for now) 
  * `-help` or `-?` : show help text
- * `-n ###` : the number of output images to make (autonumbered)
+ * `-n ###` : the number of output images to make (autonumbered). 
  * `-d [directory]` : image directory to choose from
  * `-i [file]` : specific image file to use
  * `-h ###` : height if sourced from pixabay
  * `-w ###` : height if sourced from pixabay 
  * `-o [full path]` : specify output file 
  * `-f [font family name]` : specify font family to use
+ 
+### Examples
+ 
+`./weather_image.sh -f Abydos -n 3 -r -b -d /home/steven/my_images -o /home/steven/out.jpg`
+
+Results in three images in my home directory, named `out_001.jpg`, `out_002.jpg`, 
+and `out_003.jpg` using the Abydos font on my system, pulling images from 
+`/home/steven/my_images`, and every third image being pulled from pixabay, and 
+applying a blur effect to all background images.  
+
+`./weather_image.sh -f /usr/share/fonts/truetype/noto/NotoSerif-Black.ttf -o /home/steven/out.jpg`
+
+Results in one image in my home directory, named `out.jpg`, using the Noto Serif 
+Black font, and pulling the source image from pixabay with no blur effect.
+
  
 ## 5. Todo
 

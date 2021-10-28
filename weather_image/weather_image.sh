@@ -49,7 +49,21 @@ print_help (){
 check_fonts (){
     fontexists=""
     if [ -n "$FontFamily" ];then 
-        fontexists=$(fc-list | grep -ci "$FontFamily")
+        case "$FontFamily" in  
+        *\ * )
+            echo " "
+            echo "There is a space in your font family. Because of the way imagemagick"
+            echo "and this script handle fonts, please use the *filename* of the font, by typing "
+            echo "fc-list | grep -i \"$FontFamily\" and choosing the filename. "
+            echo "We are now going to try to choose a random font from that family."
+            echo " "
+            FontFamily=$(fc-list | grep -i "$FontFamily" | grep -E ".ttf|.otf" | shuf -n 1 | awk -F ':' '{print $1}')
+            fontexists=$(fc-list | grep -ci "$FontFamily")
+            ;;
+        *)
+            fontexists=$(fc-list | grep -ci "$FontFamily")
+            ;;
+        esac
     fi
     if [ -z "$fontexists" ];then
         FontFamily="Interstate"
@@ -68,7 +82,7 @@ check_fonts (){
             fi
         fi
     fi
-    echo "Using the $FontFamily font."
+    echo "Using the $FontFamily."
 }
 
 while [ $# -gt 0 ]; do
@@ -182,7 +196,8 @@ main() {
     
     # Get our text and make it into an image
 	DataInfo=$("${SCRIPT_DIR}"/weather_image_helper.sh | grep -v "Cache")
-    IconData=$(echo "$DataInfo" | head -1)
+    # Sometimes it feeds us two icons worth of data; take the first.
+    IconData=$(echo "$DataInfo" | awk '{print $1}' | head -1)
     TextData=$(echo "$DataInfo" | tail -6)
     cp "${SCRIPT_DIR}"/icons/"$IconData".png "${TempDir}"/WeatherIcon.png
 	/usr/bin/convert -background none -fill white -stroke black -strokewidth 2 -gravity Southeast -font "${FontFamily}" -size "$TextWidth"x"$TextHeight" \
@@ -212,8 +227,9 @@ main() {
 }
 
 ################################### CONTROL PORTION ##########################
-    
+
     n=0
+    NumOutput=$(( "$NumOutput"-1 ))
     while [ $n -le "$NumOutput" ]; do
         if [ "$OccasionalRandom" = "true" ] && [ $n -ne 0 ];then
             RandoRun=""
