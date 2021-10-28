@@ -150,7 +150,7 @@ main() {
     
     
     # Get our text and make it into an image
-	DataInfo=$("${SCRIPT_DIR}"/weather.sh | grep -v "Cache")
+	DataInfo=$("${SCRIPT_DIR}"/weather_image_helper.sh | grep -v "Cache")
     IconData=$(echo "$DataInfo" | head -1)
     TextData=$(echo "$DataInfo" | tail -6)
     cp "${SCRIPT_DIR}"/icons/"$IconData".png "${TempDir}"/WeatherIcon.png
