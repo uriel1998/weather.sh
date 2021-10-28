@@ -9,6 +9,7 @@ FD_FIND=$(which fdfind)
 # Going to do programmer style counting, starting at 0 here.
 NumOutput=0  
 OccasionalRandom=""
+RandoRun=""
 
 get_image () {
             if [ -f "$FD_FIND" ];then
@@ -35,7 +36,7 @@ option="$1"
     case $option
     in
         -r) 
-            Occasional_Random=true
+            OccasionalRandom=true
             shift ;;
         -b) 
             BlurVar="True"
@@ -93,7 +94,12 @@ fi
 main() {
     
     LOOP=$(printf "%03g" "$1")
-    get_image
+    ForcePull="$2"
+    if [ -n "$ForcePull" ];then
+        ImageFile=""
+    else
+        get_image
+    fi
 	if [ -z "${ImageFile}" ];then
         wget_bin=$(which wget)
         # Obtain source image
@@ -160,16 +166,19 @@ main() {
     
     n=0
     while [ $n -le "$NumOutput" ]; do
-        if [ -n "$OccasionalRandom" ];then
-            if [ ! (( $n % 3 )) ]; then
+        if [ "$OccasionalRandom" = "true" ] && [ $n -ne 0 ];then
+            RandoRun=""
+            if ! (( $n % 3 )) ; then
                 # forcing random pull
+                RandoRun="true"
                 ImageFile=""
             fi
         fi
-        main $n
+        printf "%s" "#"
+        main $n $RandoRun
         n=$(( n+1 ))
     done
-
+    printf "/n"
 
 rm "${TempDir}"/TextImage.png
 rm "${TempDir}"/unsplash_blur.jpg
