@@ -1,4 +1,31 @@
-* [2020-12-03 07:51:55 CDT] - changelog HEAD -> master, tag: v1.0.3, gitlab/master, github/master, github/HEAD, fc/master
+* [2021-10-28 18:15:38 CDT] - desc of readme tag: 1.1.0
+* [2021-10-28 18:13:08 CDT] - up readmes
+* [2021-10-28 18:08:05 CDT] - readme, licenses, credits for icons
+* [2021-10-28 17:50:51 CDT] - readme, fixed font issue in both
+* [2021-10-28 17:15:28 CDT] - with font finding information and prereq
+* [2021-10-28 17:08:07 CDT] - images
+* [2021-10-28 17:04:30 CDT] - choosing working
+* [2021-10-28 16:30:24 CDT] - readme, realized I need to do a font sanity check...
+* [2021-10-28 15:57:37 CDT] - scriptname to avoid confusion
+* [2021-10-28 15:56:33 CDT] - text added
+* [2021-10-28 15:48:25 CDT] - Now for help text - and a switch for that....
+* [2021-10-28 15:45:57 CDT] - working, now to quiet the TTY output...
+* [2021-10-28 15:32:58 CDT] - of random pull
+* [2021-10-28 15:28:24 CDT] - with multiple output files working fixed icon placement for smaller width files
+* [2021-10-28 14:48:39 CDT] - in shuf for sort/head combo and fixed error
+* [2021-10-28 14:41:56 CDT] - in option of using find
+* [2021-10-26 16:27:03 CDT] - weather_image in main branch
+* [2021-10-26 16:21:29 CDT] - branch 'master' weather_image
+* [2021-10-26 16:20:47 CDT] - output provided
+* [2021-10-26 16:20:30 CDT] - works!
+* [2021-10-26 12:00:36 CDT] - it with all the quotes
+* [2021-10-26 11:44:12 CDT] - had that backwards...
+* [2021-10-26 11:43:06 CDT] - smokes, I think I have it.
+* [2021-10-26 11:07:02 CDT] - working weather image, now for source selection
+* [2021-10-25 21:32:08 CDT] - logic sketch
+* [2021-10-25 21:28:36 CDT] - ing in files for weather_image start
+* [2020-12-03 07:53:02 CDT] - typo in version
+* [2020-12-03 07:51:55 CDT] - changelog tag: v1.0.3
 * [2020-12-03 07:50:02 CDT] - for conky output so "cache age" doesn't appear tag: v.1.0.3
 * [2020-11-29 14:34:36 CDT] - 214956c N 2020-11-29 14:34:36 -0500 Steven Saus         changelog
 * [2020-11-29 14:33:15 CDT] - resiliance and checks for proper city response tag: v1.0.2
