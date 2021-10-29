@@ -7,21 +7,24 @@ SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 BlurVar=""
 FD_FIND=$(which fdfind)
 # Going to do programmer style counting, starting at 0 here.
-NumOutput=0  
+NumOutput=1 
 OccasionalRandom=""
 RandoRun=""
 FontFamily=""
 
+
 get_image () {
-            if [ -f "$FD_FIND" ];then
-                ImageFile=$(fdfind . "$ImageDir" --follow --type file --extension png --extension jpg | shuf -n 1 )
-            fi
-            if [ ! -f "${ImageFile}" ];then
-                ImageFile=$(find "$ImageDir" -type f  -iname "*.jpg" -or -iname "*.png" -printf '%h\n' | shuf -n 1 )
-            fi
-            if [ ! -f "${ImageFile}" ];then
-                ImageFile=""
-            fi
+    if [ -d "$ImageDir" ];then
+        if [ -f "$FD_FIND" ];then
+            ImageFile=$(fdfind . "$ImageDir" --follow --type file --extension png --extension jpg | shuf -n 1 )
+        fi
+        if [ ! -f "${ImageFile}" ];then
+            ImageFile=$(find "$ImageDir" -type f  -iname "*.jpg" -or -iname "*.png" -printf '%h\n' | shuf -n 1 )
+        fi
+    fi
+    if [ ! -f "${ImageFile}" ];then
+        ImageFile=""
+    fi
 }
 
 
@@ -47,6 +50,7 @@ print_help (){
 }
 
 check_fonts (){
+
     fontexists=""
     if [ -n "$FontFamily" ];then 
         case "$FontFamily" in  
@@ -82,7 +86,7 @@ check_fonts (){
             fi
         fi
     fi
-    echo "Using the $FontFamily."
+    echo "Using font $FontFamily."
 }
 
 while [ $# -gt 0 ]; do
@@ -159,10 +163,12 @@ main() {
     
     LOOP=$(printf "%03g" "$1")
     ForcePull="$2"
-    if [ -n "$ForcePull" ];then
-        ImageFile=""
-    else
-        get_image
+    if [ -z "$ImageFile" ];then 
+        if [ -n "$ForcePull" ];then
+            ImageFile=""
+        else
+            get_image
+        fi
     fi
 	if [ -z "${ImageFile}" ];then
         wget_bin=$(which wget)
@@ -214,7 +220,7 @@ main() {
     if [ -z "${OutputFile}" ]; then
         cp "${TempDir}"/weather.jpg "${SCRIPT_DIR}"/output_"${LOOP}".jpg
     else
-        if [ "$NumOutput" = 0 ];then
+        if [ "$NumOutput" = 1 ];then
             cp "${TempDir}"/weather.jpg "${OutputFile}"
         else
             OutExt="${OutputFile##*.}"
@@ -222,15 +228,15 @@ main() {
             cp "${TempDir}"/weather.jpg "${Out_File}"_"${LOOP}"."${OutExt}"
         fi
     fi
-    
+    ImageFile=""
 
 }
 
 ################################### CONTROL PORTION ##########################
 
     n=0
-    NumOutput=$(( "$NumOutput"-1 ))
-    while [ $n -le "$NumOutput" ]; do
+    NumOutput=$(( "$NumOutput" ))
+    while [ $n -lt "$NumOutput" ]; do
         if [ "$OccasionalRandom" = "true" ] && [ $n -ne 0 ];then
             RandoRun=""
             if ! (( "$n" % 3 )) ; then

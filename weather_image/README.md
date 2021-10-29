@@ -63,7 +63,7 @@ The *artwork* in the `icons` subdirectory is from the (free for commercial use)
  
 ## 4. How to use
 
-Once installed, run `weather_images.sh` or `forecast.sh` with the appropriate commandline 
+Once installed, run `weather_images.sh` with the appropriate commandline 
 switches (below). 
 
 ### Installation
