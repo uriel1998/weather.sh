@@ -1,7 +1,5 @@
 #!/bin/bash
 
-
-
 TempDir=$(mktemp -d)
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 BlurVar=""
@@ -11,7 +9,7 @@ NumOutput=1
 OccasionalRandom=""
 RandoRun=""
 FontFamily=""
-
+ExplicitConfigFilePath=""
 
 get_image () {
     if [ -d "$ImageDir" ];then
@@ -45,6 +43,7 @@ print_help (){
     echo " -w ### : height if sourced from pixabay "
     echo " -o [full path] : specify output file "
     echo " -f [font family] : specify font family to use "
+    echo " -c [full path] : specify config file "
     exit 0
     
 }
@@ -93,6 +92,13 @@ while [ $# -gt 0 ]; do
 option="$1"
     case $option
     in
+        -c) 
+            ExplicitConfigFilePath="$2"
+            if [ ! -f "${ExplicitConfigFilePath}" ];then
+                ExplicitConfigFilePath=""
+            fi
+            shift
+            shift ;;
         -f)           
             FontFamily="$2"
             shift
@@ -201,7 +207,11 @@ main() {
     
     
     # Get our text and make it into an image
-	DataInfo=$("${SCRIPT_DIR}"/weather_image_helper.sh | grep -v "Cache")
+    if [ -n "$ExplicitConfigFilePath" ];then
+        DataInfo=$("${SCRIPT_DIR}"/weather_image_helper.sh -r "$ExplicitConfigFilePath" | grep -v "Cache")
+    else
+        DataInfo=$("${SCRIPT_DIR}"/weather_image_helper.sh | grep -v "Cache")
+    fi
     # Sometimes it feeds us two icons worth of data; take the first.
     IconData=$(echo "$DataInfo" | awk '{print $1}' | head -1)
     TextData=$(echo "$DataInfo" | tail -6)
@@ -256,3 +266,6 @@ rm "${TempDir}"/unsplash_blur.jpg
 rm "${TempDir}"/unsplash.jpg
 rm "${TempDir}"/WeatherIcon.png
 rm -rf "${TempDir}"
+
+
+
