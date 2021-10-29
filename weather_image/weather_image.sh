@@ -266,6 +266,3 @@ rm "${TempDir}"/unsplash_blur.jpg
 rm "${TempDir}"/unsplash.jpg
 rm "${TempDir}"/WeatherIcon.png
 rm -rf "${TempDir}"
-
-
-
