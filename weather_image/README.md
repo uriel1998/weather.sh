@@ -117,6 +117,7 @@ options:
  * `-w ###` : height if sourced from pixabay 
  * `-o [full path]` : specify output file 
  * `-f [font family name]` : specify font family to use
+ * `-c [full path to config file]` : specify config file (useful for crontab, etc)
 
 ### Customization
 
@@ -163,6 +164,9 @@ applying a blur effect to all background images.
 
 Results in one image in my home directory, named `out.jpg`, using the Noto Serif 
 Black font, and pulling the source image from pixabay with no blur effect.
+
+If your commandline gets a bit long, you may wish to use a wrapper script instead, 
+particularly if you choose to use [systemd timers](https://fedoramagazine.org/systemd-timers-for-scheduling-tasks/)  instead of cron.
 
  
 ## 5. Todo
